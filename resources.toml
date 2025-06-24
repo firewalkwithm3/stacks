@@ -32,7 +32,7 @@ tags = ["internal"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "13ft"
 
 ##
@@ -53,7 +53,7 @@ links = [
   "https://sonarr.ferngarden.net/"
 ]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "arr"
 environment = """
 QBITTORRENT__PASSWORD=[[QBITTORRENT_PASSWORD]]
@@ -70,7 +70,7 @@ links = [
   "https://audiobookshelf.fern.garden"
 ]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "audiobookshelf"
 
 ##
@@ -83,7 +83,7 @@ server = "docker.local"
 links = ["https://auth.fern.garden"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "authentik"
 environment = """
 POSTGRES_PASSWORD=[[AUTHENTIK_DB_PASSWORD]]
@@ -103,7 +103,7 @@ tags = ["reverse-proxy", "public"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "caddy"
 environment = """
 CF_API_TOKEN=[[CLOUDFLARE_API_TOKEN]]
@@ -121,7 +121,7 @@ links = [
   "https://books.fern.garden"
 ]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "calibre"
 
 ##
@@ -133,7 +133,7 @@ tags = ["internal"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "dozzle"
 
 ##
@@ -145,7 +145,7 @@ tags = ["public"]
 server = "docker.local"
 links = ["https://git.fern.garden"]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "forgejo"
 environment = """
 POSTGRES_PASSWORD=[[FORGEJO_DB_PASSWORD]]
@@ -160,7 +160,7 @@ tags = ["internal"]
 server = "docker.local"
 links = ["https://grocy.ferngarden.net"]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "grocy"
 
 ##
@@ -174,7 +174,7 @@ links = [
   "https://homebox.ferngarden.net"
 ]
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "homebox"
 
 ##
@@ -186,7 +186,7 @@ tags = ["internal", "metrics"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "homepage"
 
 ##
@@ -201,7 +201,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "immich"
 environment = """
 DB_PASSWORD=[[IMMICH_DB_PASSWORD]]
@@ -216,7 +216,7 @@ tags = ["internal"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "it-tools"
 
 ##
@@ -232,7 +232,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "jellyfin"
 environment = """
 JELLYSTAT_JWT_SECRET=[[JELLYSTAT_JWT_SECRET]]
@@ -249,7 +249,7 @@ server = "docker.local"
 links = ["https:/comics.fern.garden"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "komga"
 
 ##
@@ -261,7 +261,7 @@ tags = ["internal"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "mailserver"
 
 ##
@@ -274,7 +274,7 @@ server = "docker.local"
 links = ["https://memos.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "memos"
 environment = """
 POSTGRES_PASSWORD=[[MEMOS_DB_PASSWORD]]
@@ -287,7 +287,7 @@ name = "metrics_docker_local"
 tags = ["internal", "metrics"]
 [stack.config]
 server = "docker.local"
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "metrics"
 
 ##
@@ -297,7 +297,7 @@ name = "metrics_minecraft_local"
 tags = ["internal", "metrics"]
 [stack.config]
 server = "minecraft.local"
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "metrics"
 
 ##
@@ -307,7 +307,7 @@ name = "metrics_weebill_local"
 tags = ["internal", "metrics"]
 [stack.config]
 server = "weebill.local"
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "metrics"
 
 ##
@@ -318,7 +318,7 @@ tags = ["public"]
 [stack.config]
 server = "minecraft.local"
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 reclone = true
 run_directory = "minecraft"
 environment = """
@@ -335,7 +335,7 @@ server = "docker.local"
 links = ["https://rss.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "miniflux"
 environment = """
 POSTGRES_PASSWORD=[[MINIFLUX_DB_PASSWORD]]
@@ -354,7 +354,7 @@ server = "docker.local"
 links = ["https://music.fern.garden"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "navidrome"
 environment = """
 ND_LASTFM_APIKEY=[[NAVIDROME_LASTFM_API_KEY]]
@@ -370,7 +370,7 @@ tags = ["internal"]
 server = "weebill.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "netatalk"
 environment = """
 AFP_PASS=[[NETATALK_AFP_PASSWORD]]
@@ -389,7 +389,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "nextcloud-aio"
 
 ##
@@ -405,7 +405,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "notifications"
 environment = """
 MOLLY_VAPID_PRIVKEY=[[MOLLY_VAPID_PRIVKEY]]
@@ -423,7 +423,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "paperless"
 environment = """
 POSTGRES_PASSWORD=[[PAPERLESS_DB_PASSWORD]]
@@ -444,7 +444,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "qbittorrent"
 environment = """
 WIREGUARD_PRIVATE_KEY=[[QBITTORRENT_WIREGUARD_PRIVATE_KEY]]
@@ -465,7 +465,7 @@ server = "docker.local"
 links = ["https://games.fern.garden"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "romm"
 environment = """
 MARIADB_PASSWORD=[[ROMM_DB_PASSWORD]]
@@ -490,7 +490,7 @@ server = "docker.local"
 links = ["https://stash.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "stash"
 
 ##
@@ -502,7 +502,7 @@ tags = ["internal"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "stirling-pdf"
 
 ##
@@ -514,7 +514,7 @@ tags = ["public"]
 server = "docker.local"
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "synapse"
 
 ##
@@ -527,7 +527,7 @@ server = "docker.local"
 links = ["https://vault.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "vaultwarden"
 environment = """
 SMTP_PASSWORD=[[SMTP_PASSWORD]]
@@ -545,7 +545,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
-linked_repo = "forgejo"
+linked_repo = "github"
 run_directory = "wallos"
 
 ##
@@ -556,21 +556,20 @@ name = "caddy"
 builder = "docker.local"
 version = "2.10.0"
 auto_increment_version = false
-linked_repo = "forgejo"
+linked_repo = "github"
 build_path = "caddy"
-image_registry.domain = "git.fern.garden"
-image_registry.account = "fern"
+image_registry.domain = "ghcr.io"
+image_registry.account = "firewalkwithm3"
 
 ##
 
 [[repo]]
-name = "forgejo"
+name = "github"
 [repo.config]
 server = "docker.local"
 builder = "docker.local"
-git_provider = "git.fern.garden"
-git_account = "fern"
-repo = "fern/stacks"
+git_account = "firewalkwithm3"
+repo = "firewalkwithm3/stacks"
 
 ##
 
@@ -583,8 +582,8 @@ params.server_id = "docker.local"
 ##
 
 [[resource_sync]]
-name = "forgejo"
+name = "github"
 [resource_sync.config]
-linked_repo = "forgejo"
+linked_repo = "github"
 resource_path = ["resources.toml"]
 managed = true
