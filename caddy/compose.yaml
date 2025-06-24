@@ -1,6 +1,6 @@
 services:
   caddy:
-    image: git.fern.garden/fern/caddy:latest
+    image: ghcr.io/firewalkwithm3/caddy:latest
     container_name: caddy
     restart: unless-stopped
     ports:
