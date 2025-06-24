@@ -19,7 +19,7 @@ services:
       - SLSKD_SLSK_USERNAME=MtQueerie
       - SLSKD_SLSK_PASSWORD=${SLSKD_SLSK_PASSWORD}
     volumes:
-      - slskd_data:/app
+      - /mnt/docker/slskd/data:/app
       - /media:/media
     restart: unless-stopped
     labels:
@@ -33,7 +33,3 @@ networks:
     external: true
   media:
     external: true
-
-volumes:
-  slskd_data:
-    name: slskd_data
