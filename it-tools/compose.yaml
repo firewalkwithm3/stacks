@@ -1,0 +1,17 @@
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: it-tools.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 80 }}'
+
+networks:
+  default:
+  proxy:
+    external: true

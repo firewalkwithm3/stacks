@@ -1,0 +1,17 @@
+services:
+  13ft:
+    container_name: 13ft
+    image: ghcr.io/wasi-master/13ft:latest
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: 13ft.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 5000 }}'
+
+networks:
+  default:
+  proxy:
+    external: true

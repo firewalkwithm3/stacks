@@ -1,0 +1,19 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    restart: unless-stopped
+    volumes:
+      - /mnt/docker/glance/config:/app/config
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: glance.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 8080 }}'
+
+networks:
+  default:
+  proxy:
+    external: true

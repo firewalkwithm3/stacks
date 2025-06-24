@@ -1,0 +1,304 @@
+services:
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    networks:
+      - default
+      - proxy
+      - media
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Australia/Perth
+    volumes:
+      - jellyseerr_config:/app/config
+    restart: unless-stopped
+    labels:
+      caddy: jellyseerr.fern.garden
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 5055}}"
+
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - jackett_config:/config
+      - jackett_downloads:/downloads
+    restart: unless-stopped
+    labels:
+      caddy: jackett.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - prowlarr_config:/config
+    restart: unless-stopped
+    labels:
+      caddy: prowlarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    networks:
+      - default
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Australia/Perth
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - bazarr_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: bazarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - sonarr_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: sonarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - radarr_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: radarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  lidarr:
+    image: blampe/lidarr:latest
+    container_name: lidarr
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - lidarr_config:/config
+      - beets_config:/beets
+      - ./install_beets.bash:/custom-cont-init.d/install_beets.bash:ro
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: lidarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  readarr-audiobooks:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr-audiobooks
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - readarr-audiobooks_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: readarr-audiobooks.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  readarr-ebooks:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr-ebooks
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - readarr-ebooks_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: readarr-ebooks.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  letterboxd-list-radarr:
+    image: screeny05/letterboxd-list-radarr:latest
+    container_name: letterboxd-list-radarr
+    restart: unless-stopped
+    networks:
+      - default
+    environment:
+      - REDIS_URL=redis://letterboxd-list-radarr_redis:6379
+    depends_on:
+      - letterboxd-list-radarr_redis
+
+  letterboxd-list-radarr_redis:
+    container_name: letterboxd-list-radarr_redis
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - letterboxd-list-radarr_redis:/data
+    image: redis:6.0
+
+  soularr:
+    image: mrusse08/soularr:latest
+    container_name: soularr
+    networks:
+      - default
+      - media
+    user: 1000:1800
+    environment:
+      - TZ=Australia/Perth
+      - SCRIPT_INTERVAL=300
+    volumes:
+      - /media:/media
+      - /mnt/docker/soularr/config:/data
+    restart: unless-stopped
+
+  cleanuperr:
+    image: ghcr.io/flmorg/cleanuperr:latest
+    container_name: cleanuperr
+    restart: unless-stopped
+    networks:
+      - default
+      - media
+    volumes:
+      - cleanuperr_logs:/var/logs
+      - /media:/media
+    environment:
+      - TZ=Australia/Perth
+      - DOWNLOADCLEANER__ENABLED=true
+      - DOWNLOADCLEANER__UNLINKED_TARGET_CATEGORY=unlinked
+      - DOWNLOADCLEANER__UNLINKED_USE_TAG=true
+      - DOWNLOADCLEANER__UNLINKED_CATEGORIES__0=tv
+      - DOWNLOADCLEANER__UNLINKED_CATEGORIES__1=film
+      - DOWNLOAD_CLIENT=qBittorrent
+      - QBITTORRENT__URL=http://qbittorrent_gluetun:8080
+      - QBITTORRENT__USERNAME=fern
+      - QBITTORRENT__PASSWORD=${QBITTORRENT__PASSWORD}
+
+  profilarr:
+    image: santiagosayshey/profilarr:latest
+    container_name: profilarr
+    networks:
+      - default
+      - media
+      - proxy
+    volumes:
+      - profilarr_config:/config
+    environment:
+      - TZ=Australia/Perth
+    restart: unless-stopped
+    labels:
+      caddy: profilarr.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 6868}}"
+
+networks:
+  default:
+  proxy:
+    external: true
+  media:
+    name: media
+
+volumes:
+  bazarr_config:
+    name: bazarr_config
+  beets_config:
+    name: beets_config
+  cleanuperr_config:
+    name: cleanuperr_config
+  cleanuperr_logs:
+    name: cleanuperr_logs
+  jackett_config:
+    name: jackett_config
+  jackett_downloads:
+    name: jackett_downloads
+  jellyseerr_config:
+    name: jellyseerr_config
+  letterboxd-list-radarr_redis:
+    name: letterboxd-list-radarr_redis
+  lidarr_config:
+    name: lidarr_config
+  profilarr_config:
+    name: profilarr_config
+  prowlarr_config:
+    name: prowlarr_config
+  radarr_config:
+    name: radarr_config
+  readarr-audiobooks_config:
+    name: readarr-audiobooks_config
+  readarr-ebooks_config:
+    name: readarr-ebooks_config
+  sonarr_config:
+    name: sonarr_config

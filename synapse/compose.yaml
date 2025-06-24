@@ -1,0 +1,54 @@
+services:
+  synapse:
+    image: docker.io/matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    volumes:
+      - synapse_data:/data
+    depends_on:
+      - synapse_db
+    labels:
+      caddy_0: mx.fern.garden
+      caddy_0.1_reverse_proxy: reverse_proxy /_matrix/* synapse:8008
+      caddy_0.2_reverse_proxy: reverse_proxy /_synapse/client/* synapse:8008
+
+      caddy_1: matrix.fern.garden
+      caddy_1.handle.1_encode: zstd gzip
+      caddy_1.handle.2_reverse_proxy: matrix-traefik:8080
+      caddy_1.handle.2_reverse_proxy.1_header_up: X-Forwarded-Port {http.request.port}
+      caddy_1.handle.2_reverse_proxy.2_header_up: X-Forwarded-TlsProto {tls_protocol}
+      caddy_1.handle.2_reverse_proxy.3_header_up: X-Forwarded-TlsCipher {tls_cipher}
+      caddy_1.handle.2_reverse_proxy.4_header_up: X-Forwarded-HttpsProto {proto}
+
+      caddy_2: matrix.fern.garden:8448
+      caddy_2.handle.1_encode: zstd gzip
+      caddy_2.handle.2_reverse_proxy: matrix-traefik:8448
+      caddy_2.handle.2_reverse_proxy.1_header_up: X-Forwarded-Port {http.request.port}
+      caddy_2.handle.2_reverse_proxy.2_header_up: X-Forwarded-TlsProto {tls_protocol}
+      caddy_2.handle.2_reverse_proxy.3_header_up: X-Forwarded-TlsCipher {tls_cipher}
+      caddy_2.handle.2_reverse_proxy.4_header_up: X-Forwarded-HttpsProto {proto}
+
+  synapse_db:
+    image: docker.io/postgres:16-alpine
+    container_name: synapse_db
+    networks:
+      - default
+    restart: unless-stopped
+    volumes:
+      - synapse_db:/var/lib/postgresql/data
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  synapse_data:
+    name: synapse_data
+  synapse_db:
+    name: synapse_db

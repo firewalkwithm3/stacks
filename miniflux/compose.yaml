@@ -1,0 +1,54 @@
+services:
+  miniflux:
+    image: miniflux/miniflux:latest
+    container_name: miniflux
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    depends_on:
+      miniflux_db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://miniflux:${POSTGRES_PASSWORD}@miniflux_db/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+      - CREATE_ADMIN=1
+      - DISABLE_LOCAL_AUTH=true
+      - ADMIN_USERNAME=fern
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - OAUTH2_PROVIDER=oidc
+      - OAUTH2_CLIENT_ID=${OAUTH2_CLIENT_ID}
+      - OAUTH2_CLIENT_SECRET=${OAUTH2_CLIENT_SECRET}
+      - OAUTH2_REDIRECT_URL=https://rss.ferngarden.net/oauth2/oidc/callback
+      - OAUTH2_OIDC_DISCOVERY_ENDPOINT=https://auth.fern.garden/application/o/miniflux/
+      - OAUTH2_USER_CREATION=1
+    labels:
+      caddy: rss.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+  miniflux_db:
+    image: postgres:17-alpine
+    container_name: miniflux_db
+    restart: unless-stopped
+    networks:
+      - default
+    environment:
+      - POSTGRES_USER=miniflux
+      - POSTGRES_DB=miniflux
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - miniflux_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "miniflux"]
+      interval: 10s
+      start_period: 30s
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  miniflux_db:
+    name: miniflux_db

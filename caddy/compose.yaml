@@ -1,0 +1,34 @@
+services:
+  caddy:
+    image: git.fern.garden/fern/caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    networks:
+      - default
+      - proxy
+      - traefik
+    environment:
+      - CADDY_INGRESS_NETWORKS=proxy
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
+      - CADDY_DOCKER_CADDYFILE_PATH=/etc/caddy/Caddyfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /srv:/srv
+      - caddy_data:/data
+
+volumes:
+  caddy_data:
+    name: caddy_data
+
+networks:
+  default:
+  proxy:
+    external: true
+  traefik:
+    external: true

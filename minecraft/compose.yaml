@@ -1,0 +1,63 @@
+services:
+  minecraft_proxy:
+    image: itzg/mc-proxy
+    container_name: minecraft_proxy
+    restart: unless-stopped
+    volumes:
+      - velocity_config:/config
+      - velocity_server:/server
+    networks:
+      - default
+    ports:
+      - 25565:25565
+    environment:
+      - TYPE=VELOCITY
+      - MINECRAFT_VERSION=1.21.5
+
+  minecraft_server_mc:
+    image: itzg/minecraft-server
+    container_name: minecraft_server_mc
+    hostname: mc
+    restart: unless-stopped
+    volumes:
+      - minecraft_server_mc:/data
+    networks:
+      - default
+    depends_on:
+      - minecraft_proxy
+    env_file:
+      - server.env
+    environment:
+      - MOTD=meow
+      - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/mc.png
+      - PLUGINS=https://dev.bukkit.org/projects/dead-chest/files/latest
+
+  minecraft_server_bob:
+    image: itzg/minecraft-server
+    container_name: minecraft_server_bob
+    hostname: bob
+    restart: unless-stopped
+    volumes:
+      - minecraft_server_bob:/data
+    depends_on:
+      - minecraft_proxy
+    env_file:
+      - server.env
+    environment:
+      - MOTD=it's bob's world, we're just living in it
+      - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/bob.png
+
+networks:
+  default:
+
+volumes:
+  minecraft_webadmin_db:
+    name: minecraft_webadmin_db
+  minecraft_server_mc:
+    name: minecraft_server_mc
+  minecraft_server_bob:
+    name: minecraft_server_bob
+  velocity_config:
+    name: velocity_config
+  velocity_server:
+    name: velocity_server

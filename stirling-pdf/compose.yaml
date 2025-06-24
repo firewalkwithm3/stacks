@@ -1,0 +1,25 @@
+services:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    container_name: stirling-pdf
+    volumes:
+      - /mnt/docker/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - /mnt/docker/stirling-pdf/extraConfigs:/configs
+      - /mnt/docker/stirling-pdf/customFiles:/customFiles/
+      - /mnt/docker/stirling-pdf/logs:/logs/
+      - /mnt/docker/stirling-pdf/pipeline:/pipeline/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - LANGS=en_GB
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: pdf.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 8080 }}'
+
+networks:
+  default:
+  proxy:
+    external: true

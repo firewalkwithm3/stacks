@@ -1,0 +1,30 @@
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    volumes:
+      - komga_config:/config
+      - /media:/media:ro
+    user: "1000:1800"
+    environment:
+      - TZ=Australia/Perth
+      - KOMGA_OAUTH2_ACCOUNT_CREATION=true
+    restart: unless-stopped
+    networks:
+      - default
+      - media
+      - proxy
+    labels:
+      caddy: comics.fern.garden
+      caddy.reverse_proxy: '{{upstreams 25600}}'
+
+networks:
+  default:
+  media:
+    external: true
+  proxy:
+    external: true
+
+volumes:
+  komga_config:
+    name: komga_config

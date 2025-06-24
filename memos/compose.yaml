@@ -1,0 +1,43 @@
+services:
+  memos:
+    image: neosmemo/memos:stable
+    container_name: memos
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    depends_on:
+      - memos_db
+    volumes:
+      - memos_data:/var/opt/memos
+    environment:
+      - MEMOS_DRIVER=postgres
+      - MEMOS_DSN=user=memos password=${POSTGRES_PASSWORD} dbname=memosdb host=memos_db sslmode=disable
+    labels:
+      caddy: memos.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 5230}}"
+
+  memos_db:
+    image: postgres:16.1
+    container_name: memos_db
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - memos_db:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=memos
+      - POSTGRES_DB=memosdb
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  memos_db:
+    name: memos_db
+  memos_data:
+    name: memos_data

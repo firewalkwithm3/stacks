@@ -1,0 +1,53 @@
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    networks:
+      - default
+      - proxy
+      - media
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - calibre_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: calibre.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    networks:
+      - default
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - calibre-web_config:/config
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: books.fern.garden
+      caddy.reverse_proxy: "{{upstreams 8083}}"
+
+networks:
+  default:
+  proxy:
+    external: true
+  media:
+    external: true
+
+volumes:
+  calibre_config:
+    name: calibre_config
+  calibre-web_config:
+    name: calibre-web_config

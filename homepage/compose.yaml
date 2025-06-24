@@ -1,0 +1,24 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    volumes:
+      - /mnt/docker/homepage/config:/app/config
+    user: 1000:1000
+    restart: unless-stopped
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: dash.ferngarden.net
+    networks:
+      - default
+      - proxy
+      - metrics
+    labels:
+      caddy: dash.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 3000 }}'
+
+networks:
+  proxy:
+    external: true
+  metrics:
+    external: true

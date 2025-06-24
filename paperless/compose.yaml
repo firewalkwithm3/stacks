@@ -1,0 +1,87 @@
+services:
+  paperless_redis:
+    image: docker.io/library/redis:8
+    container_name: paperless_redis
+    restart: unless-stopped
+    volumes:
+      - paperless_redis:/data
+    networks:
+      - default
+
+  paperless_db:
+    image: docker.io/library/postgres:17
+    container_name: paperless_db
+    restart: unless-stopped
+    volumes:
+      - paperless_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - default
+
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless
+    restart: unless-stopped
+    depends_on:
+      - paperless_db
+      - paperless_redis
+    volumes:
+      - paperless_data:/usr/src/paperless/data
+      - paperless_media:/usr/src/paperless/media
+    environment:
+      PAPERLESS_REDIS: redis://paperless_redis:6379
+      PAPERLESS_DBHOST: paperless_db
+      PAPERLESS_DBPASS: ${POSTGRES_PASSWORD}
+      USERMAP_UID: 1000
+      USERMAP_GID: 1000
+      PAPERLESS_URL: https://paperless.ferngarden.net
+      PAPERLESS_TIME_ZONE: Australia/Perth
+      PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
+      PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: true
+      PAPERLESS_SOCIAL_AUTO_SIGNUP: true
+      PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: true
+      PAPERLESS_DISABLE_REGULAR_LOGIN: true
+      PAPERLESS_REDIRECT_LOGIN_TO_SSO: true
+      PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: >
+        {
+          "openid_connect": {
+            "APPS": [
+              {
+                "provider_id": "authentik",
+                "name": "Authentik",
+                "client_id": "${AUTHENTIK_CLIENT_ID}",
+                "secret": "${AUTHENTIK_CLIENT_SECRET}",
+                "settings": {
+                  "server_url": "https://auth.fern.garden/application/o/paperless/.well-known/openid-configuration"
+                }
+              }
+            ],
+            "OAUTH_PKCE_ENABLED": "True"
+          }
+        }
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: paperless.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 8000}}"
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  paperless_data:
+    name: paperless_data
+  paperless_media:
+    name: paperless_media
+  paperless_db:
+    name: paperless_db
+  paperless_redis:
+    name: paperless_redis

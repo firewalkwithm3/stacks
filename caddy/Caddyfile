@@ -1,0 +1,106 @@
+## Global Options ##
+
+{
+	acme_dns cloudflare {env.CF_API_TOKEN}
+	auto_https prefer_wildcard
+	email mail@fern.garden
+}
+
+## Snippets ##
+
+(internal) {
+	@denied not remote_ip private_ranges
+	abort @denied
+}
+
+(authentik) {
+        reverse_proxy authentik_proxy:9000
+}
+
+## Root Hosts ##
+
+*.fern.garden {
+	redir https://fern.garden
+}
+
+*.ferngarden.net {
+	import internal
+	redir https://ferngarden.net
+}
+
+*.transgender.pet {
+	redir https://transgender.pet
+}
+
+fern.garden {
+	route {
+		reverse_proxy /.well-known/matrix/* https://matrix.fern.garden {
+			header_up Host {upstream_hostport}
+		}
+		root * /srv/fern.garden
+		file_server
+	}
+}
+
+ferngarden.net {
+	import internal
+	respond / "nothing here :(" 404
+}
+
+transgender.pet {
+	file_server
+	root * /srv/transgender.pet
+}
+
+## Proxmox ##
+
+spoonbill.ferngarden.net {
+	import internal
+	reverse_proxy 10.0.1.2:8006 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+egret.ferngarden.net {
+	import internal
+	reverse_proxy 10.0.1.3:8006 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+pdm.ferngarden.net {
+	import internal
+	reverse_proxy 10.0.1.120:8443 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+pbs.ferngarden.net {
+	import internal
+	reverse_proxy 10.0.1.121:8007 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+## VMs/Containers ##
+
+dns.ferngarden.net {
+	import internal
+	reverse_proxy 10.0.1.111:5380
+}
+
+ffsync.fern.garden {
+	reverse_proxy 10.0.1.102:8000
+}
+
+home.fern.garden {
+	reverse_proxy 10.0.1.103:8123
+}

@@ -1,0 +1,26 @@
+services:
+  wallos:
+    image: bellamy/wallos:latest
+    container_name: wallos
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    volumes:
+      - wallos_db:/var/www/html/db
+      - wallos_logos:/var/www/html/images/uploads/logos
+    labels:
+      caddy: subscriptions.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "authentik_proxy:9000"
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  wallos_db:
+    name: wallos_db
+  wallos_logos:
+    name: wallos_logos

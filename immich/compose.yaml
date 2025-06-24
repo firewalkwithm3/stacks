@@ -1,0 +1,78 @@
+services:
+  immich:
+    container_name: immich
+    hostname: immich-server
+    image: ghcr.io/immich-app/immich-server:release
+    volumes:
+      - immich_library:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - default
+      - proxy
+    environment:
+      - DB_USERNAME=postgres
+      - DB_DATABASE_NAME=immich
+      - DB_PASSWORD=${DB_PASSWORD}
+    devices:
+      - /dev/dri:/dev/dri
+    depends_on:
+      - immich_redis
+      - immich_db
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+    labels:
+      caddy: photos.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 2283}}"
+
+
+  immich_ml:
+    container_name: immich_ml
+    hostname: immich-machine-learning
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    volumes:
+      - immich_ml_cache:/cache
+    networks:
+      - default
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+
+  immich_redis:
+    container_name: immich_redis
+    hostname: redis
+    image: docker.io/valkey/valkey:8-bookworm@sha256:ff21bc0f8194dc9c105b769aeabf9585fea6a8ed649c0781caeac5cb3c247884
+    networks:
+      - default
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: unless-stopped
+
+  immich_db:
+    container_name: immich_db
+    hostname: database
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1
+    networks:
+      - default
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=immich
+      - POSTGRES_INITDB_ARGS='--data-checksums'
+    volumes:
+      - immich_db:/var/lib/postgresql/data
+    restart: always
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  immich_library:
+    name: immich_library
+  immich_ml_cache:
+    name: immich_ml_cache
+  immich_db:
+    name: immich_db

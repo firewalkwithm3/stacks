@@ -1,0 +1,31 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+    environment:
+      - DOMAIN=https://vault.ferngarden.net
+      - SMTP_HOST=mail.ferngarden.net
+      - SMTP_PORT=587
+      - SMTP_SECURITY=starttls
+      - SMTP_FROM=Vaultwarden <ornithologist@ferngarden.net>
+      - SMTP_USERNAME=ornithologist@ferngarden.net
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    volumes:
+      - vaultwarden_data:/data
+    labels:
+      caddy: vault.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  vaultwarden_data:
+    name: vaultwarden_data

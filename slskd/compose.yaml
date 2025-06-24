@@ -1,0 +1,39 @@
+services:
+  slskd:
+    image: slskd/slskd:latest
+    container_name: slskd
+    networks:
+      - default
+      - proxy
+      - media
+    user: 1000:1800
+    ports:
+      - 50300:50300
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+      - SLSKD_SHARED_DIR=/media/media/lidarr
+      - SLSKD_DOWNLOADS_DIR=/media/downloads/slskd/downloads
+      - SLSKD_INCOMPLETE_DIR=/media/downloads/slskd/incomplete
+      - SLSKD_USERNAME=fern
+      - SLSKD_PASSWORD=${SLSKD_PASSWORD}
+      - SLSKD_SLSK_USERNAME=MtQueerie
+      - SLSKD_SLSK_PASSWORD=${SLSKD_SLSK_PASSWORD}
+    volumes:
+      - slskd_data:/app
+      - /media:/media
+    restart: unless-stopped
+    labels:
+      caddy: slskd.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 5030}}"
+
+networks:
+  default:
+  proxy:
+    external: true
+  media:
+    external: true
+
+volumes:
+  slskd_data:
+    name: slskd_data

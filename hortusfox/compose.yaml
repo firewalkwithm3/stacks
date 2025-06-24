@@ -1,0 +1,57 @@
+services:
+  hortusfox:
+    image: ghcr.io/danielbrendel/hortusfox-web:latest
+    container_name: hortusfox
+    volumes:
+      - hortusfox_images:/var/www/html/public/img
+      - hortusfox_logs:/var/www/html/hortusfox/logs
+      - hortusfox_backup:/var/www/html/public/backup
+      - hortusfox_themes:/var/www/html/public/themes
+      - hortusfox_migrate:/var/www/html/hortusfox/migrations
+    environment:
+      APP_ADMIN_EMAIL: mail@fern.garden
+      APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD}
+      APP_TIMEZONE: Australia/Perth
+      DB_HOST: hortusfox_db
+      DB_PORT: 3306
+      DB_DATABASE: hortusfox
+      DB_USERNAME: hortusfox
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_CHARSET: "utf8mb4"
+    networks:
+      - default
+      - proxy
+    depends_on:
+      - hortusfox_db
+    labels:
+      caddy: hortusfox.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+  hortusfox_db:
+    image: mariadb
+    container_name: hortusfox_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: hortusfox
+      MYSQL_USER: hortusfox
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - hortusfox_db:/var/lib/mysql
+    networks:
+      - default
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  hortusfox_db:
+  hortusfox_images:
+  hortusfox_logs:
+  hortusfox_backup:
+  hortusfox_themes:
+  hortusfox_migrate:
+

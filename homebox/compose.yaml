@@ -1,0 +1,28 @@
+services:
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:latest-rootless
+    container_name: homebox
+    restart: unless-stopped
+    environment:
+    - HBOX_LOG_LEVEL=info
+    - HBOX_LOG_FORMAT=text
+    - HBOX_WEB_MAX_FILE_UPLOAD=10
+    - HBOX_OPTIONS_ALLOW_ANALYTICS=false
+    volumes:
+      - homebox_data:/data/
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: homebox.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 7745 }}'
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+   homebox_data:
+     name: homebox_data

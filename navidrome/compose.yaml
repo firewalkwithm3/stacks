@@ -1,0 +1,30 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+    environment:
+      - ND_BASEURL=https://music.fern.garden
+      - ND_REVERSEPROXYUSERHEADER=X-authentik-username
+      - ND_REVERSEPROXYWHITELIST=0.0.0.0/0
+      - ND_LASTFM_APIKEY=${ND_LASTFM_APIKEY}
+      - ND_LASTFM_SECRET=${ND_LASTFM_SECRET}
+      - ND_PLAYLISTSPATH=Playlists
+    volumes:
+      - navidrome_data:/data
+      - /media/media/beets:/music:ro
+    labels:
+      caddy: music.fern.garden
+      caddy.import: authentik
+
+networks:
+  default:
+  proxy:
+    external: true
+
+volumes:
+  navidrome_data:
+    name: navidrome_data
