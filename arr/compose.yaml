@@ -141,7 +141,7 @@ services:
       - TZ=Australia/Perth
     volumes:
       - lidarr_config:/config
-      - beets_config:/beets
+      - /mnt/docker/beets/config:/beets
       - ./install_beets.bash:/custom-cont-init.d/install_beets.bash:ro
       - /media:/media
     restart: unless-stopped
