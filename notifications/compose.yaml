@@ -44,25 +44,6 @@ services:
       caddy: mollysocket.fern.garden
       caddy.reverse_proxy: "{{upstreams 8020}}"
 
-  apprise-api:
-    image: lscr.io/linuxserver/apprise-api:latest
-    container_name: apprise-api
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Australia/Perth
-    networks:
-      - default
-      - proxy
-    volumes:
-      - apprise-api_config:/config
-      - apprise-api_attachments:/attachments
-    restart: unless-stopped
-    labels:
-      caddy: apprise.ferngarden.net
-      caddy.import: internal
-      caddy.reverse_proxy: '{{ upstreams 8000 }}'
-
 networks:
   default:
   proxy:
