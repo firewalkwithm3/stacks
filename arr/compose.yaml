@@ -245,7 +245,7 @@ services:
       - DOWNLOAD_CLIENT=qBittorrent
       - QBITTORRENT__URL=http://qbittorrent_gluetun:8080
       - QBITTORRENT__USERNAME=fern
-      - QBITTORRENT__PASSWORD=${QBITTORRENT__PASSWORD}
+      - QBITTORRENT__PASSWORD=${QBITTORRENT_PASSWORD}
 
   profilarr:
     image: santiagosayshey/profilarr:latest
