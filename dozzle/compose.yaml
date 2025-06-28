@@ -8,9 +8,10 @@ services:
       - proxy
     labels:
       caddy: dozzle.ferngarden.net
-      caddy.import: internal
-      caddy.reverse_proxy: '{{ upstreams 8080 }}'
+      caddy.1_import: internal
+      caddy.2_import: authentik
     environment:
+      DOZZLE_AUTH_PROVIDER: forward-proxy
       DOZZLE_REMOTE_HOST: tcp://docker_socket_proxy:2375|docker.local,tcp://10.0.1.105:2375|minecraft.local,tcp://10.0.1.4:2375|weebill.local
 
 networks:
