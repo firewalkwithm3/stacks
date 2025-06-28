@@ -65,6 +65,8 @@ services:
       POSTGRES_IP: jellystat_db
       POSTGRES_PORT: 5432
       JWT_SECRET: ${JELLYSTAT_JWT_SECRET}
+      JS_USER: fern
+      JS_PASSWORD: ${JELLYSTAT_PASSWORD}
       TZ: Australia/Perth
     volumes:
       - jellystat_data:/app/backend/backup-data
