@@ -2,7 +2,8 @@ services:
   scrutiny:
     image: ghcr.io/analogj/scrutiny:master-omnibus
     container_name: scrutiny
-    cap_add: SYS_RAWIO
+    cap_add: 
+      - SYS_RAWIO
     volumes:
       - /run/udev:/run/udev:ro
       - /mnt/docker/scrutiny/influxdb:/opt/scrutiny/influxdb
