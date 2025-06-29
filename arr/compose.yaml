@@ -225,28 +225,21 @@ services:
       - /mnt/docker/soularr/config:/data
     restart: unless-stopped
 
-  cleanuperr:
+  cleanuparr:
     image: ghcr.io/cleanuparr/cleanuparr:latest
-    container_name: cleanuperr
+    container_name: cleanuparr
     restart: unless-stopped
     networks:
       - default
       - proxy
       - media
     volumes:
-      - cleanuperr_logs:/var/logs
+      - /mnt/docker/cleanuparr/config:/config
       - /media:/media
     environment:
       - TZ=Australia/Perth
-      - DOWNLOADCLEANER__ENABLED=true
-      - DOWNLOADCLEANER__UNLINKED_TARGET_CATEGORY=unlinked
-      - DOWNLOADCLEANER__UNLINKED_USE_TAG=true
-      - DOWNLOADCLEANER__UNLINKED_CATEGORIES__0=tv
-      - DOWNLOADCLEANER__UNLINKED_CATEGORIES__1=film
-      - DOWNLOAD_CLIENT=qBittorrent
-      - QBITTORRENT__URL=http://qbittorrent_gluetun:8080
-      - QBITTORRENT__USERNAME=fern
-      - QBITTORRENT__PASSWORD=${QBITTORRENT_PASSWORD}
+      - PUID=1000
+      - PGID=1800
     labels:
       caddy: cleanuparr.ferngarden.net
       caddy.import: internal
