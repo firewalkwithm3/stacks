@@ -1,0 +1,40 @@
+services:
+  linkwarden_db:
+    image: postgres:16-alpine
+    container_name: linkwarden_db
+    env_file: linkwarden.env
+    restart: always
+    volumes:
+      - /mnt/docker/linkwarden/database:/var/lib/postgresql/data
+    networks:
+      - default
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:latest
+    env_file: linkwarden.env
+    restart: always
+    volumes:
+      - /mnt/docker/linkwarden/data:/data/data
+    depends_on:
+      - linkwarden_db
+      - linkwarden_search
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: linkwarden.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 3000 }}'
+  linkwarden_search:
+    image: getmeili/meilisearch:v1.12.8
+    container_name: linkwarden_search
+    restart: always
+    env_file: linkwarden.env
+    volumes:
+      - /mnt/docker/linkwarden/search:/meili_data
+    networks:
+      - default
+
+networks:
+  default:
+  proxy:
+    external: true
