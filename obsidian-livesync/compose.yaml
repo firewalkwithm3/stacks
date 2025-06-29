@@ -10,6 +10,8 @@ services:
     volumes:
       - /mnt/docker/obsidian-livesync/data:/opt/couchdb/data
       - /mnt/docker/obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
+    ports:
+      - 5984:5984
     networks:
       - default
       - proxy
