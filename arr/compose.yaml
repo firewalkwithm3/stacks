@@ -151,7 +151,7 @@ services:
       caddy.2_import: authentik
 
   readarr-audiobooks:
-    image: lscr.io/linuxserver/readarr:develop
+    image: ghcr.io/firewalkwithm3/readarr:latest
     container_name: readarr-audiobooks
     networks:
       - default
@@ -171,7 +171,7 @@ services:
       caddy.2_import: authentik
 
   readarr-ebooks:
-    image: lscr.io/linuxserver/readarr:develop
+    image: ghcr.io/firewalkwithm3/readarr:latest
     container_name: readarr-ebooks
     networks:
       - default
