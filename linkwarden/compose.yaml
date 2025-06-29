@@ -2,7 +2,10 @@ services:
   linkwarden_db:
     image: postgres:16-alpine
     container_name: linkwarden_db
-    env_file: linkwarden.env
+    environment:
+      - POSTGRES_USER=linkwarden
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=linkwarden
     restart: always
     volumes:
       - /mnt/docker/linkwarden/database:/var/lib/postgresql/data
@@ -10,7 +13,10 @@ services:
       - default
   linkwarden:
     image: ghcr.io/linkwarden/linkwarden:latest
-    env_file: linkwarden.env
+    environment:
+      - DATABASE_URL=postgresql://linkwarden:${POSTGRES_PASSWORD}@linkwarden_db:5432/linkwarden
+      - MEILI_HOST=linkwarden_search
+      - NEXTAUTH_URL=https://linkwarden.ferngarden.net/api/v1/auth
     restart: always
     volumes:
       - /mnt/docker/linkwarden/data:/data/data
@@ -28,7 +34,6 @@ services:
     image: getmeili/meilisearch:v1.12.8
     container_name: linkwarden_search
     restart: always
-    env_file: linkwarden.env
     volumes:
       - /mnt/docker/linkwarden/search:/meili_data
     networks:
