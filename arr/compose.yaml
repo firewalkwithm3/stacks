@@ -226,11 +226,12 @@ services:
     restart: unless-stopped
 
   cleanuperr:
-    image: ghcr.io/flmorg/cleanuperr:latest
+    image: ghcr.io/cleanuparr/cleanuparr:latest
     container_name: cleanuperr
     restart: unless-stopped
     networks:
       - default
+      - proxy
       - media
     volumes:
       - cleanuperr_logs:/var/logs
@@ -246,7 +247,11 @@ services:
       - QBITTORRENT__URL=http://qbittorrent_gluetun:8080
       - QBITTORRENT__USERNAME=fern
       - QBITTORRENT__PASSWORD=${QBITTORRENT_PASSWORD}
-
+    labels:
+      caddy: cleanuparr.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 11011 }}'
+  
   profilarr:
     image: santiagosayshey/profilarr:latest
     container_name: profilarr
