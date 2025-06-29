@@ -197,6 +197,7 @@ services:
       - PUID=1000
       - PGID=1800
       - TZ=Australia/Perth
+      - DOCKER_MODS=linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg #optional
     volumes:
       - /mnt/docker/lazylibrarian/data:/config
       - /media:/media
