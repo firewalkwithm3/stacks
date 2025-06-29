@@ -201,6 +201,10 @@ services:
     volumes:
       - /mnt/docker/lazylibrarian/data:/config
       - /media:/media
+    networks:
+      - default
+      - proxy
+      - media
     ports:
       - 5299:5299
     restart: unless-stopped
