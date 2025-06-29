@@ -1,24 +1,25 @@
-obsidian-livesync:
-  container_name: obsidian-livesync
-  image: couchdb:3.3.3
-  environment:
-    - PUID=99
-    - PGID=100
-    - UMASK=0022
-    - TZ=Australia/Perth
-    - COUCHDB_USER=obsidian
-    - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-  volumes:
-    - /mnt/docker/obsidian-livesync/data:/opt/couchdb/data
-    - /mnt/docker/obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
-  networks:
-    - default
-    - proxy
-  restart: unless-stopped
-  labels:
-    caddy: obsidian-livesync.ferngarden.net
-    caddy.import: internal
-    caddy.reverse_proxy: '{{ upstreams 5984 }}'
+services:
+  obsidian-livesync:
+    container_name: obsidian-livesync
+    image: couchdb:3.3.3
+    environment:
+      - PUID=99
+      - PGID=100
+      - UMASK=0022
+      - TZ=Australia/Perth
+      - COUCHDB_USER=obsidian
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+    volumes:
+      - /mnt/docker/obsidian-livesync/data:/opt/couchdb/data
+      - /mnt/docker/obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+    labels:
+      caddy: obsidian-livesync.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 5984 }}'
 
 networks:
   default:
