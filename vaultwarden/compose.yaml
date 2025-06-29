@@ -12,7 +12,7 @@ services:
       - SMTP_PORT=587
       - SMTP_SECURITY=starttls
       - SMTP_FROM=Vaultwarden <ornithologist@ferngarden.net>
-      - SMTP_USERNAME=ornithologist@ferngarden.net
+      - SMTP_USERNAME=ornithologist
       - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
       - vaultwarden_data:/data
