@@ -1,11 +1,9 @@
 services:
   obsidian-livesync:
     container_name: obsidian-livesync
-    image: couchdb:3.3.3
+    image: couchdb:latest
+    user: 1000:1000
     environment:
-      - PUID=99
-      - PGID=100
-      - UMASK=0022
       - TZ=Australia/Perth
       - COUCHDB_USER=obsidian
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
