@@ -56,7 +56,7 @@ auto_update = true
 linked_repo = "github"
 run_directory = "arr"
 environment = """
-QBITTORRENT__PASSWORD=[[QBITTORRENT_PASSWORD]]
+QBITTORRENT_PASSWORD=[[QBITTORRENT_PASSWORD]]
 """
 
 ##
@@ -237,6 +237,7 @@ run_directory = "jellyfin"
 environment = """
 JELLYSTAT_JWT_SECRET=[[JELLYSTAT_JWT_SECRET]]
 JELLYSTAT_POSTGRES_PASSWORD=[[JELLYSTAT_DB_PASSWORD]]
+JELLYSTAT_PASSWORD=[[JELLYSTAT_PASSWORD]]
 """
 
 ##
@@ -251,6 +252,24 @@ poll_for_updates = true
 auto_update = true
 linked_repo = "github"
 run_directory = "komga"
+
+##
+
+[[stack]]
+name = "linkwarden"
+tags = ["internal"]
+[stack.config]
+server = "docker.local"
+auto_update = true
+linked_repo = "github"
+run_directory = "linkwarden"
+environment = """
+NEXTAUTH_SECRET=[[LINKWARDEN_NEXTAUTH_SECRET]]
+POSTGRES_PASSWORD=[[LINKWARDEN_DB_PASSWORD]]
+MEILI_MASTER_KEY=[[LINKWARDEN_MEILI_MASTER_KEY]]
+AUTHENTIK_CLIENT_ID=[[LINKWARDEN_AUTHENTIK_CLIENT_ID]]
+AUTHENTIK_CLIENT_SECRET=[[LINKWARDEN_AUTHENTIK_CLIENT_SECRET]]
+"""
 
 ##
 
@@ -478,6 +497,31 @@ STEAMGRIDDB_API_KEY=[[STEAMGRIDDB_API_KEY]]
 MOBYGAMES_API_KEY=[[MOBYGAMES_API_KEY]]
 OIDC_CLIENT_ID=[[ROMM_OIDC_CLIENT_ID]]
 OIDC_CLIENT_SECRET=[[ROMM_OIDC_CLIENT_SECRET]]
+"""
+
+##
+
+[[stack]]
+name = "scrutiny"
+[stack.config]
+server = "docker.local"
+auto_update = true
+linked_repo = "github"
+run_directory = "scrutiny"
+
+##
+
+[[stack]]
+name = "slskd"
+[stack.config]
+server = "docker.local"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github"
+run_directory = "slskd"
+environment = """
+SLSKD_PASSWORD=[[SLSKD_PASSWORD]]
+SLSKD_SLSK_PASSWORD=[[SOULSEEK_PASSWORD]]
 """
 
 ##
