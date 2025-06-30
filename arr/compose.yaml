@@ -150,6 +150,28 @@ services:
       caddy.1_import: internal
       caddy.2_import: authentik
 
+  lidarr-audiobooks:
+    image: blampe/lidarr:latest
+    container_name: lidarr-audiobooks
+    networks:
+      - default
+      - media
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    volumes:
+      - /mnt/docker/lidarr-audiobooks/config:/config
+      - /media:/media
+    restart: unless-stopped
+    ports:
+      - 8686:8686
+    labels:
+      caddy: lidarr-audiobooks.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
   lazylibrarian:
     image: lscr.io/linuxserver/lazylibrarian:latest
     container_name: lazylibrarian
