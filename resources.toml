@@ -48,8 +48,6 @@ links = [
   "https://lidarr.ferngarden.net/",
   "https://prowlarr.ferngarden.net/",
   "https://radarr.ferngarden.net/",
-  "https://readarr-audiobooks.ferngarden.net/",
-  "https://readarr-ebooks.ferngarden.net/",
   "https://sonarr.ferngarden.net/"
 ]
 auto_update = true
@@ -112,14 +110,11 @@ CF_API_TOKEN=[[CLOUDFLARE_API_TOKEN]]
 ##
 
 [[stack]]
-name = "calibre"
+name = "calibre-web-automated"
 tags = ["media", "public"]
 [stack.config]
 server = "docker.local"
-links = [
-  "https://calibre.ferngarden.net",
-  "https://books.fern.garden"
-]
+links = ["https://books.fern.garden"]
 auto_update = true
 linked_repo = "github"
 run_directory = "calibre"
@@ -433,6 +428,20 @@ MOLLY_VAPID_PRIVKEY=[[MOLLY_VAPID_PRIVKEY]]
 ##
 
 [[stack]]
+name = "obsidian-livesync"
+tags = ["internal"]
+[stack.config]
+server = "docker.local"
+auto_update = true
+linked_repo = "github"
+run_directory = "obsidian-livesync"
+environment = """
+COUCHDB_PASSWORD=[[OBSIDIAN_LIVESYNC_DB_PASSWORD]]
+"""
+
+##
+
+[[stack]]
 name = "paperless"
 tags = ["internal"]
 [stack.config]
@@ -503,6 +512,7 @@ OIDC_CLIENT_SECRET=[[ROMM_OIDC_CLIENT_SECRET]]
 
 [[stack]]
 name = "scrutiny"
+tags = ["internal", "metrics"]
 [stack.config]
 server = "docker.local"
 auto_update = true
@@ -513,6 +523,7 @@ run_directory = "scrutiny"
 
 [[stack]]
 name = "slskd"
+tags = ["internal", "media"]
 [stack.config]
 server = "docker.local"
 poll_for_updates = true
@@ -602,6 +613,21 @@ version = "2.10.0"
 auto_increment_version = false
 linked_repo = "github"
 build_path = "caddy"
+image_registry.domain = "ghcr.io"
+image_registry.account = "firewalkwithm3"
+
+##
+
+[[build]]
+name = "readarr"
+[build.config]
+builder = "docker.local"
+version = "0.4.18"
+auto_increment_version = false
+git_account = "firewalkwithm3"
+repo = "linuxserver/docker-readarr"
+branch = "develop"
+commit = "develop-0.4.18.2805-ls157"
 image_registry.domain = "ghcr.io"
 image_registry.account = "firewalkwithm3"
 
