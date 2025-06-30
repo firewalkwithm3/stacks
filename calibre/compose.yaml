@@ -1,44 +1,4 @@
 services:
-  calibre:
-    image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre
-    networks:
-      - default
-      - proxy
-      - media
-    security_opt:
-      - seccomp:unconfined
-    environment:
-      - PUID=1000
-      - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - calibre_config:/config
-      - /media:/media
-    restart: unless-stopped
-    labels:
-      caddy: calibre.ferngarden.net
-      caddy.import: internal
-      caddy.reverse_proxy: "{{upstreams 8080}}"
-
-  calibre-web:
-    image: lscr.io/linuxserver/calibre-web:latest
-    container_name: calibre-web
-    networks:
-      - default
-      - proxy
-    environment:
-      - PUID=1000
-      - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - calibre-web_config:/config
-      - /media:/media
-    restart: unless-stopped
-    labels:
-      caddy: books.fern.garden
-      caddy.reverse_proxy: "{{upstreams 8083}}"
-  
   calibre-web-automated:
     image: crocodilestick/calibre-web-automated:latest
     container_name: calibre-web-automated
@@ -49,10 +9,14 @@ services:
     volumes:
       - /mnt/docker/calibre-web-automated/config:/config 
       - /media/media/calibre/ingest:/cwa-book-ingest
-      - /media/media/calibre/library:/calibre-library 
-    ports:
-      # Change the first number to change the port you want to access the Web UI, not the second
-      - 8083:8083 
+      - /media/media/calibre/library:/calibre-library
+    networks:
+      - default
+      - proxy
+      - media
+    labels:
+      caddy: books.fern.garden
+      caddy.reverse_proxy: '{{ upstreams 8083 }}'
     restart: unless-stopped
 
 networks:
@@ -61,9 +25,3 @@ networks:
     external: true
   media:
     external: true
-
-volumes:
-  calibre_config:
-    name: calibre_config
-  calibre-web_config:
-    name: calibre-web_config
