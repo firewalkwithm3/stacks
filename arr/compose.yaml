@@ -161,6 +161,8 @@ services:
       - default
       - media
       - proxy
+    ports:
+      - 8686:8686
     restart: unless-stopped
     labels:
       caddy: lidarr-audiobooks.ferngarden.net
