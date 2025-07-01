@@ -1,7 +1,10 @@
+name: hortusfox
 services:
   hortusfox:
     image: ghcr.io/danielbrendel/hortusfox-web:latest
     container_name: hortusfox
+    depends_on:
+      - hortusfox_db
     volumes:
       - hortusfox_images:/var/www/html/public/img
       - hortusfox_logs:/var/www/html/hortusfox/logs
@@ -21,8 +24,6 @@ services:
     networks:
       - default
       - proxy
-    depends_on:
-      - hortusfox_db
     labels:
       caddy: hortusfox.ferngarden.net
       caddy.import: internal
@@ -31,16 +32,16 @@ services:
   hortusfox_db:
     image: mariadb
     container_name: hortusfox_db
-    restart: always
+    volumes:
+      - hortusfox_db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: hortusfox
       MYSQL_USER: hortusfox
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - hortusfox_db:/var/lib/mysql
     networks:
       - default
+    restart: always
 
 networks:
   default:
@@ -54,4 +55,5 @@ volumes:
   hortusfox_backup:
   hortusfox_themes:
   hortusfox_migrate:
+
 

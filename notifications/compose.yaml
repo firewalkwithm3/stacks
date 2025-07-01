@@ -1,37 +1,10 @@
+name: notifications
 services:
-  ntfy:
-    image: binwiederhier/ntfy
-    container_name: ntfy
-    networks:
-      - default
-      - proxy
-    command: serve
-    volumes:
-      - ntfy_cache:/var/cache/ntfy
-      - ntfy_config:/etc/ntfy
-      - ntfy_data:/var/lib/ntfy
-    healthcheck:
-        test: ["CMD-SHELL", "wget -q --tries=1 http://localhost:2586/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1"]
-        interval: 60s
-        timeout: 10s
-        retries: 3
-        start_period: 40s
-    restart: unless-stopped
-    labels:
-      caddy: ntfy.fern.garden
-      caddy.reverse_proxy: "{{upstreams 2586}}"
-
   mollysocket:
     image: ghcr.io/mollyim/mollysocket:1
     container_name: mollysocket
-    networks:
-      - default
-      - proxy
-    restart: unless-stopped
     volumes:
       - mollysocket_data:/data
-    working_dir: /data
-    command: server
     environment:
       - MOLLY_DB=/data/mollysocket.db
       - MOLLY_ALLOWED_ENDPOINTS=["https://ntfy.fern.garden"]
@@ -40,9 +13,36 @@ services:
       - MOLLY_HOST=0.0.0.0
       - MOLLY_PORT=8020
       - RUST_LOG=info
+    networks:
+      - default
+      - proxy
+    command: server
+    working_dir: /data
+    restart: unless-stopped
     labels:
       caddy: mollysocket.fern.garden
       caddy.reverse_proxy: "{{upstreams 8020}}"
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    volumes:
+      - ntfy_cache:/var/cache/ntfy
+      - ntfy_config:/etc/ntfy
+      - ntfy_data:/var/lib/ntfy
+    networks:
+      - default
+      - proxy
+    command: serve
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --tries=1 http://localhost:2586/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1" ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      caddy: ntfy.fern.garden
+      caddy.reverse_proxy: "{{upstreams 2586}}"
 
 networks:
   default:

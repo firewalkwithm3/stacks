@@ -1,3 +1,4 @@
+name: komga
 services:
   komga:
     image: gotson/komga
@@ -5,18 +6,18 @@ services:
     volumes:
       - komga_config:/config
       - /media:/media:ro
-    user: "1000:1800"
     environment:
       - TZ=Australia/Perth
       - KOMGA_OAUTH2_ACCOUNT_CREATION=true
-    restart: unless-stopped
     networks:
       - default
       - media
       - proxy
+    restart: unless-stopped
     labels:
       caddy: comics.fern.garden
       caddy.reverse_proxy: '{{upstreams 25600}}'
+    user: "1000:1800"
 
 networks:
   default:

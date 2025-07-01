@@ -1,11 +1,12 @@
+name: it-tools
 services:
   it-tools:
     image: corentinth/it-tools:latest
     container_name: it-tools
-    restart: unless-stopped
     networks:
       - default
       - proxy
+    restart: unless-stopped
     labels:
       caddy: it-tools.ferngarden.net
       caddy.import: internal

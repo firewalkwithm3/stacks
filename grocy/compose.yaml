@@ -1,7 +1,10 @@
+name: grocy
 services:
   grocy:
     image: lscr.io/linuxserver/grocy:latest
     container_name: grocy
+    volumes:
+      - grocy_config:/config
     environment:
       - PUID=1000
       - PGID=1000
@@ -10,13 +13,11 @@ services:
       - GROCY_FEATURE_FLAG_SHOPPINGLIST=false
       - GROCY_FEATURE_FLAG_STOCK=false
       - GROCY_CURRENCY=AUD
+    ports:
+      - '9192:80'
     networks:
       - default
       - proxy
-    ports:
-      - 9192:80
-    volumes:
-      - grocy_config:/config
     restart: unless-stopped
     labels:
       caddy: grocy.ferngarden.net

@@ -1,8 +1,18 @@
+name: romm
 services:
   romm:
     image: rommapp/romm:latest
     container_name: romm
-    restart: unless-stopped
+    depends_on:
+      romm_db:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+      - romm_redis:/redis-data # Cached data for background tasks
+      - romm_assets:/romm/assets # Uploaded saves, states, etc.
+      - romm_config:/romm/config # Path where config.yml is stored
+      - /media/media/romm:/romm/library/roms:ro # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
     environment:
       - DB_HOST=romm_db
       - DB_NAME=romm # Should match MARIADB_DATABASE in mariadb
@@ -21,19 +31,10 @@ services:
       - SCREENSCRAPER_USER=mondas # Use your ScreenScraper username and password
       - SCREENSCRAPER_PASSWORD=${SCREENSCRAPER_PASSWORD} # https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#screenscraper
       - STEAMGRIDDB_API_KEY=${STEAMGRIDDB_API_KEY} # https://github.com/rommapp/romm/wiki/Metadata-Providers#steamgriddb
-    volumes:
-      - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
-      - romm_redis:/redis-data # Cached data for background tasks
-      - romm_assets:/romm/assets # Uploaded saves, states, etc.
-      - romm_config:/romm/config # Path where config.yml is stored
-      - /media/media/romm:/romm/library/roms:ro # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
-    depends_on:
-      romm_db:
-        condition: service_healthy
-        restart: true
     networks:
       - default
       - proxy
+    restart: unless-stopped
     labels:
       caddy: games.fern.garden
       caddy.reverse_proxy: '{{upstreams 8080}}'
@@ -41,18 +42,18 @@ services:
   romm_db:
     image: mariadb:latest
     container_name: romm_db
-    restart: unless-stopped
+    volumes:
+      - romm_db:/var/lib/mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD} # Use a unique, secure password
       - MARIADB_DATABASE=romm
       - MARIADB_USER=romm
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
-    volumes:
-      - romm_db:/var/lib/mysql
     networks:
       - default
+    restart: unless-stopped
     healthcheck:
-      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      test: [ CMD, healthcheck.sh, --connect, --innodb_initialized ]
       start_period: 30s
       start_interval: 10s
       interval: 10s

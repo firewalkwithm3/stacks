@@ -1,12 +1,26 @@
+name: forgejo
 services:
+  forgejo_db:
+    image: postgres:14
+    container_name: forgejo_db
+    volumes:
+      - forgejo_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=forgejo
+      - POSTGRES_DB=forgejo
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - default
+    restart: unless-stopped
   server:
     image: codeberg.org/forgejo/forgejo:11
     container_name: forgejo
-    networks:
-      - proxy
-      - default
-    ports:
-      - 222:22
+    depends_on:
+      - forgejo_db
+    volumes:
+      - forgejo_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - USER_UID=1000
       - USER_GID=1000
@@ -15,29 +29,15 @@ services:
       - FORGEJO__database__NAME=forgejo
       - FORGEJO__database__USER=forgejo
       - FORGEJO__database__PASSWD=${POSTGRES_PASSWORD}
+    ports:
+      - '222:22'
+    networks:
+      - proxy
+      - default
     restart: unless-stopped
-    volumes:
-      - forgejo_data:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - forgejo_db
     labels:
       caddy: git.fern.garden
       caddy.reverse_proxy: "{{upstreams 3000}}"
-
-  forgejo_db:
-    image: postgres:14
-    container_name: forgejo_db
-    networks:
-      - default
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=forgejo
-      - POSTGRES_DB=forgejo
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-      - forgejo_db:/var/lib/postgresql/data
 
 networks:
   default:

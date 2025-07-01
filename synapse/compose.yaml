@@ -1,17 +1,18 @@
+name: synapse
 services:
   synapse:
     image: docker.io/matrixdotorg/synapse:latest
     container_name: synapse
-    restart: unless-stopped
+    depends_on:
+      - synapse_db
+    volumes:
+      - synapse_data:/data
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
     networks:
       - default
       - proxy
-    environment:
-      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
-    volumes:
-      - synapse_data:/data
-    depends_on:
-      - synapse_db
+    restart: unless-stopped
     labels:
       caddy_0: mx.fern.garden
       caddy_0.1_reverse_proxy: reverse_proxy /_matrix/* synapse:8008
@@ -36,11 +37,11 @@ services:
   synapse_db:
     image: docker.io/postgres:16-alpine
     container_name: synapse_db
+    volumes:
+      - synapse_db:/var/lib/postgresql/data
     networks:
       - default
     restart: unless-stopped
-    volumes:
-      - synapse_db:/var/lib/postgresql/data
 
 networks:
   default:

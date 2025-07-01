@@ -1,18 +1,8 @@
+name: stash
 services:
   stash:
     image: stashapp/stash:latest
     container_name: stash
-    networks:
-      - default
-      - proxy
-    restart: unless-stopped
-    environment:
-      - STASH_STASH=/data/
-      - STASH_GENERATED=/generated/
-      - STASH_METADATA=/metadata/
-      - STASH_CACHE=/cache/
-      - STASH_BLOBS=/blobs/
-      - STASH_PORT=9999
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /media/downloads/porn:/data:ro
@@ -21,6 +11,17 @@ services:
       - stash_cache:/cache
       - stash_blobs:/blobs
       - stash_generated:/generated
+    environment:
+      - STASH_STASH=/data/
+      - STASH_GENERATED=/generated/
+      - STASH_METADATA=/metadata/
+      - STASH_CACHE=/cache/
+      - STASH_BLOBS=/blobs/
+      - STASH_PORT=9999
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
     labels:
       caddy: stash.ferngarden.net
       caddy.1_import: internal

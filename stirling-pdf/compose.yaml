@@ -1,3 +1,4 @@
+name: stirling-pdf
 services:
   stirling-pdf:
     image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
@@ -11,7 +12,6 @@ services:
     environment:
       - DOCKER_ENABLE_SECURITY=false
       - LANGS=en_GB
-    user: 1000:1000
     networks:
       - default
       - proxy
@@ -19,6 +19,7 @@ services:
       caddy: pdf.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 8080 }}'
+    user: 1000:1000
 
 networks:
   default:

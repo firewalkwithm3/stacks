@@ -1,25 +1,14 @@
+name: jellyfin
 services:
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
-    user: 1000:1800
-    group_add:
-      - 992
-    devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
-    networks:
-      - default
-      - proxy
-      - media
     volumes:
       - jellyfin_cache:/var/cache/jellyfin
       - jellyfin_config:/etc/jellyfin
       - jellyfin_data:/var/lib/jellyfin
       - jellyfin_logs:/var/log/jellyfin
       - /media:/media
-    restart: unless-stopped
-    ports:
-      - 8096:8096
     environment:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.fern.garden
       - JELLYFIN_CACHE_DIR=/var/cache/jellyfin
@@ -27,38 +16,30 @@ services:
       - JELLYFIN_DATA_DIR=/var/lib/jellyfin
       - JELLYFIN_LOG_DIR=/var/log/jellyfin
       - TZ=Australia/Perth
+    ports:
+      - '8096:8096'
+    networks:
+      - default
+      - proxy
+      - media
+    restart: unless-stopped
     labels:
       caddy: jellyfin.fern.garden
       caddy.@blacklist.not.path: "/metrics"
       caddy.reverse_proxy: "@blacklist {{upstreams 8096}}"
-
-  jellystat_db:
-    image: postgres:15.2
-    shm_size: '1gb'
-    container_name: jellystat_db
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
-    environment:
-      POSTGRES_USER: jellystat
-      POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
-    networks:
-      - default
-    volumes:
-      - jellystat_db:/var/lib/postgresql/data
+    user: 1000:1800
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    group_add:
+      - 992
 
   jellystat:
     image: cyfershepard/jellystat:latest
     container_name: jellystat
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "10m"
+    depends_on:
+      - jellystat_db
+    volumes:
+      - jellystat_data:/app/backend/backup-data
     environment:
       POSTGRES_USER: jellystat
       POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
@@ -68,17 +49,37 @@ services:
       JS_USER: fern
       JS_PASSWORD: ${JELLYSTAT_PASSWORD}
       TZ: Australia/Perth
-    volumes:
-      - jellystat_data:/app/backend/backup-data
     networks:
       - default
       - proxy
-    depends_on:
-      - jellystat_db
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
     labels:
       caddy: jellystat.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{upstreams 3000}}'
+
+  jellystat_db:
+    image: postgres:15.2
+    container_name: jellystat_db
+    volumes:
+      - jellystat_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: jellystat
+      POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
+    networks:
+      - default
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    shm_size: '1gb'
 
 networks:
   default:

@@ -1,11 +1,13 @@
+name: 13ft
+
 services:
   13ft:
-    container_name: 13ft
     image: ghcr.io/wasi-master/13ft:latest
-    restart: unless-stopped
+    container_name: 13ft
     networks:
       - default
       - proxy
+    restart: unless-stopped
     labels:
       caddy: 13ft.ferngarden.net
       caddy.import: internal

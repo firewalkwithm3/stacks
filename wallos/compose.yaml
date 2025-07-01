@@ -1,14 +1,15 @@
+name: wallosf
 services:
   wallos:
     image: bellamy/wallos:latest
     container_name: wallos
-    restart: unless-stopped
-    networks:
-      - default
-      - proxy
     volumes:
       - wallos_db:/var/www/html/db
       - wallos_logos:/var/www/html/images/uploads/logos
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
     labels:
       caddy: subscriptions.ferngarden.net
       caddy.import: internal

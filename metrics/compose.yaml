@@ -1,32 +1,33 @@
+name: metrics
 services:
   docker_socket_proxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: docker_socket_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
     environment:
       - CONTAINERS=1 # Allow access to viewing containers
       - INFO=1
       - POST=0 # Disallow any POST operations (effectively read-only)
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
-    restart: unless-stopped
     ports:
-      - 2375:2375
+      - '2375:2375'
     networks:
       - default
       - metrics
+    restart: unless-stopped
 
   glances:
     image: nicolargo/glances:latest
     container_name: glances
-    restart: always
-    pid: host
     environment:
       - "GLANCES_OPT=-w"
     ports:
-      - 61208:61208
+      - '61208:61208'
     networks:
       - default
       - metrics
+    restart: always
+    pid: host
 
 networks:
   default:

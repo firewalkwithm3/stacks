@@ -1,18 +1,12 @@
+name: linkwarden
 services:
-  linkwarden_db:
-    image: postgres:16-alpine
-    container_name: linkwarden_db
-    environment:
-      - POSTGRES_USER=linkwarden
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=linkwarden
-    restart: always
-    volumes:
-      - /mnt/docker/linkwarden/database:/var/lib/postgresql/data
-    networks:
-      - default
   linkwarden:
     image: ghcr.io/linkwarden/linkwarden:latest
+    depends_on:
+      - linkwarden_db
+      - linkwarden_search
+    volumes:
+      - /mnt/docker/linkwarden/data:/data/data
     environment:
       - DATABASE_URL=postgresql://linkwarden:${POSTGRES_PASSWORD}@linkwarden_db:5432/linkwarden
       - MEILI_HOST=linkwarden_search
@@ -22,27 +16,34 @@ services:
       - AUTHENTIK_ISSUER=https://auth.fern.garden/application/o/linkwarden
       - AUTHENTIK_CLIENT_ID=${AUTHENTIK_CLIENT_ID}
       - AUTHENTIK_CLIENT_SECRET=${AUTHENTIK_CLIENT_SECRET}
-    restart: always
-    volumes:
-      - /mnt/docker/linkwarden/data:/data/data
-    depends_on:
-      - linkwarden_db
-      - linkwarden_search
     networks:
       - default
       - proxy
+    restart: always
     labels:
       caddy: linkwarden.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 3000 }}'
+  linkwarden_db:
+    image: postgres:16-alpine
+    container_name: linkwarden_db
+    volumes:
+      - /mnt/docker/linkwarden/database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=linkwarden
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=linkwarden
+    networks:
+      - default
+    restart: always
   linkwarden_search:
     image: getmeili/meilisearch:v1.12.8
     container_name: linkwarden_search
-    restart: always
     volumes:
       - /mnt/docker/linkwarden/search:/meili_data
     networks:
       - default
+    restart: always
 
 networks:
   default:

@@ -1,17 +1,19 @@
+name: audiobookshelf
+
 services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:latest
     container_name: audiobookshelf
-    restart: unless-stopped
-    networks:
-      - default
-      - proxy
     volumes:
       - audiobookshelf_config:/config
       - audiobookshelf_metadata:/metadata
       - /media:/media
     environment:
       - TZ=Australia/Perth
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
     labels:
       caddy: audiobooks.fern.garden
       caddy.reverse_proxy: "{{upstreams 80}}"

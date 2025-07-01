@@ -1,159 +1,98 @@
+name: arr
+
 services:
-  jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
-    networks:
-      - default
-      - proxy
-      - media
-    environment:
-      - LOG_LEVEL=debug
-      - TZ=Australia/Perth
-    volumes:
-      - jellyseerr_config:/app/config
-    restart: unless-stopped
-    labels:
-      caddy: jellyseerr.fern.garden
-      caddy.import: internal
-      caddy.reverse_proxy: "{{upstreams 5055}}"
-
-  jackett:
-    image: lscr.io/linuxserver/jackett:latest
-    container_name: jackett
-    networks:
-      - default
-      - media
-      - proxy
-    environment:
-      - PUID=1000
-      - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - jackett_config:/config
-      - jackett_downloads:/downloads
-    restart: unless-stopped
-    labels:
-      caddy: jackett.ferngarden.net
-      caddy.1_import: internal
-      caddy.2_import: authentik
-
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
-    networks:
-      - default
-      - media
-      - proxy
-    environment:
-      - PUID=1000
-      - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - prowlarr_config:/config
-    restart: unless-stopped
-    labels:
-      caddy: prowlarr.ferngarden.net
-      caddy.1_import: internal
-      caddy.2_import: authentik
-
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    networks:
-      - default
-    environment:
-      - LOG_LEVEL=info
-      - LOG_HTML=false
-      - CAPTCHA_SOLVER=none
-      - TZ=Australia/Perth
-    restart: unless-stopped
-
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
-    networks:
-      - default
-      - media
-      - proxy
+    volumes:
+      - bazarr_config:/config
+      - /media:/media
     environment:
       - PUID=1000
       - PGID=1800
       - TZ=Australia/Perth
-    volumes:
-      - bazarr_config:/config
-      - /media:/media
+    networks:
+      - default
+      - media
+      - proxy
     restart: unless-stopped
     labels:
       caddy: bazarr.ferngarden.net
       caddy.1_import: internal
       caddy.2_import: authentik
 
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    networks:
-      - default
-      - media
-      - proxy
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: cleanuparr
+    volumes:
+      - /mnt/docker/cleanuparr/config:/config
+      - /media:/media
     environment:
+      - TZ=Australia/Perth
       - PUID=1000
       - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - sonarr_config:/config
-      - /media:/media
+    networks:
+      - default
+      - proxy
+      - media
     restart: unless-stopped
     labels:
-      caddy: sonarr.ferngarden.net
-      caddy.1_import: internal
-      caddy.2_import: authentik
+      caddy: cleanuparr.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 11011 }}'
 
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Australia/Perth
     networks:
       - default
-      - media
-      - proxy
-    environment:
-      - PUID=1000
-      - PGID=1800
-      - TZ=Australia/Perth
-    volumes:
-      - radarr_config:/config
-      - /media:/media
     restart: unless-stopped
-    labels:
-      caddy: radarr.ferngarden.net
-      caddy.1_import: internal
-      caddy.2_import: authentik
 
-  lidarr:
-    image: blampe/lidarr:latest
-    container_name: lidarr
-    networks:
-      - default
-      - media
-      - proxy
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    volumes:
+      - jackett_config:/config
+      - jackett_downloads:/downloads
     environment:
       - PUID=1000
       - PGID=1800
       - TZ=Australia/Perth
-    volumes:
-      - lidarr_config:/config
-      - /mnt/docker/beets/config:/beets
-      - ./install_beets.bash:/custom-cont-init.d/install_beets.bash:ro
-      - /media:/media
+    networks:
+      - default
+      - media
+      - proxy
     restart: unless-stopped
     labels:
-      caddy: lidarr.ferngarden.net
+      caddy: jackett.ferngarden.net
       caddy.1_import: internal
       caddy.2_import: authentik
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    volumes:
+      - jellyseerr_config:/app/config
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Australia/Perth
+    networks:
+      - default
+      - proxy
+      - media
+    restart: unless-stopped
+    labels:
+      caddy: jellyseerr.fern.garden
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 5055}}"
 
   kapowarr:
-    container_name: kapowarr
     image: mrcas/kapowarr:latest
-    user: 1000:1800
+    container_name: kapowarr
     volumes:
       - /mnt/docker/kapowarr/database:/app/db
       - /media:/media
@@ -165,78 +104,140 @@ services:
       caddy: kapowarr.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 5656 }}'
+    user: 1000:1800
 
   letterboxd-list-radarr:
     image: screeny05/letterboxd-list-radarr:latest
     container_name: letterboxd-list-radarr
-    restart: unless-stopped
-    networks:
-      - default
-    environment:
-      - REDIS_URL=redis://letterboxd-list-radarr_redis:6379
     depends_on:
       - letterboxd-list-radarr_redis
+    environment:
+      - REDIS_URL=redis://letterboxd-list-radarr_redis:6379
+    networks:
+      - default
+    restart: unless-stopped
 
   letterboxd-list-radarr_redis:
+    image: redis:6.0
     container_name: letterboxd-list-radarr_redis
-    restart: unless-stopped
-    networks:
-      - default
     volumes:
       - letterboxd-list-radarr_redis:/data
-    image: redis:6.0
-
-  soularr:
-    image: mrusse08/soularr:latest
-    container_name: soularr
     networks:
       - default
-      - media
-    user: 1000:1800
-    environment:
-      - TZ=Australia/Perth
-      - SCRIPT_INTERVAL=300
-    volumes:
-      - /media:/media
-      - /mnt/docker/soularr/config:/data
     restart: unless-stopped
 
-  cleanuparr:
-    image: ghcr.io/cleanuparr/cleanuparr:latest
-    container_name: cleanuparr
-    restart: unless-stopped
-    networks:
-      - default
-      - proxy
-      - media
+  lidarr:
+    image: blampe/lidarr:latest
+    container_name: lidarr
     volumes:
-      - /mnt/docker/cleanuparr/config:/config
+      - lidarr_config:/config
+      - /mnt/docker/beets/config:/beets
+      - ./install_beets.bash:/custom-cont-init.d/install_beets.bash:ro
       - /media:/media
     environment:
-      - TZ=Australia/Perth
       - PUID=1000
       - PGID=1800
+      - TZ=Australia/Perth
+    networks:
+      - default
+      - media
+      - proxy
+    restart: unless-stopped
     labels:
-      caddy: cleanuparr.ferngarden.net
-      caddy.import: internal
-      caddy.reverse_proxy: '{{ upstreams 11011 }}'
-  
+      caddy: lidarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
   profilarr:
     image: santiagosayshey/profilarr:latest
     container_name: profilarr
-    networks:
-      - default
-      - media
-      - proxy
     volumes:
       - profilarr_config:/config
     environment:
       - TZ=Australia/Perth
+    networks:
+      - default
+      - media
+      - proxy
     restart: unless-stopped
     labels:
       caddy: profilarr.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 6868}}"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    volumes:
+      - prowlarr_config:/config
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    networks:
+      - default
+      - media
+      - proxy
+    restart: unless-stopped
+    labels:
+      caddy: prowlarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    volumes:
+      - radarr_config:/config
+      - /media:/media
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    networks:
+      - default
+      - media
+      - proxy
+    restart: unless-stopped
+    labels:
+      caddy: radarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    volumes:
+      - sonarr_config:/config
+      - /media:/media
+    environment:
+      - PUID=1000
+      - PGID=1800
+      - TZ=Australia/Perth
+    networks:
+      - default
+      - media
+      - proxy
+    restart: unless-stopped
+    labels:
+      caddy: sonarr.ferngarden.net
+      caddy.1_import: internal
+      caddy.2_import: authentik
+
+  soularr:
+    image: mrusse08/soularr:latest
+    container_name: soularr
+    volumes:
+      - /media:/media
+      - /mnt/docker/soularr/config:/data
+    environment:
+      - TZ=Australia/Perth
+      - SCRIPT_INTERVAL=300
+    networks:
+      - default
+      - media
+    restart: unless-stopped
+    user: 1000:1800
 
 networks:
   default:

@@ -1,27 +1,30 @@
+name: calibre
 services:
   calibre-web-automated:
     image: crocodilestick/calibre-web-automated:latest
     container_name: calibre-web-automated
+    volumes:
+      - /mnt/docker/calibre-web-automated/config:/config
+      - /media/media/calibre/ingest:/cwa-book-ingest
+      - /media/media/calibre/library:/calibre-library
     environment:
       - PUID=1000
       - PGID=1800
       - TZ=Australia/Perth
-    volumes:
-      - /mnt/docker/calibre-web-automated/config:/config 
-      - /media/media/calibre/ingest:/cwa-book-ingest
-      - /media/media/calibre/library:/calibre-library
     networks:
       - default
       - proxy
       - media
+    restart: unless-stopped
     labels:
       caddy: books.fern.garden
       caddy.reverse_proxy: '{{ upstreams 8083 }}'
-    restart: unless-stopped
 
   cwa-downloader:
     image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
     container_name: cwa-downloader
+    volumes:
+      - /media/media/calibre/ingest:/cwa-book-ingest
     environment:
       FLASK_PORT: 8084
       LOG_LEVEL: info
@@ -36,8 +39,6 @@ services:
       - media
       - proxy
     restart: unless-stopped
-    volumes:
-      - /media/media/calibre/ingest:/cwa-book-ingest
     labels:
       caddy: books-dl.ferngarden.net
       caddy.import: internal

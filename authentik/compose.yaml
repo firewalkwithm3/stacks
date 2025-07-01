@@ -1,129 +1,132 @@
+name: authentik
+
 services:
+  authentik:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
+    container_name: authentik
+    depends_on:
+      authentik_db:
+        condition: service_healthy
+      authentik_redis:
+        condition: service_healthy
+    volumes:
+      - authentik_media:/media
+      - authentik_templates:/templates
+    environment:
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_POSTGRESQL__HOST=authentik_db
+      - AUTHENTIK_POSTGRESQL__USER=authentik
+      - AUTHENTIK_POSTGRESQL__NAME=authentik
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${POSTGRES_PASSWORD}
+      - AUTHENTIK_OUTPOSTS__DISABLE_EMBEDDED_OUTPOST=true
+    networks:
+      - default
+      - proxy
+    command: server
+    restart: unless-stopped
+    labels:
+      caddy: auth.fern.garden
+      caddy.reverse_proxy: "{{upstreams 9000}}"
   authentik_db:
     image: docker.io/library/postgres:16-alpine
     container_name: authentik_db
-    networks:
-      - default
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 5s
     volumes:
       - authentik_db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=authentik
       - POSTGRES_DB=authentik
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
-  authentik_redis:
-    image: docker.io/library/redis:alpine
-    container_name: authentik_redis
     networks:
       - default
-    command: --save 60 1 --loglevel warning
-    restart: always
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       start_period: 20s
       interval: 30s
       retries: 5
-      timeout: 3s
-    volumes:
-      - authentik_redis:/data
+      timeout: 5s
 
-  authentik:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
-    container_name: authentik
-    networks:
-      - default
-      - proxy
-    restart: unless-stopped
-    command: server
-    environment:
-      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
-      - AUTHENTIK_REDIS__HOST=authentik_redis
-      - AUTHENTIK_POSTGRESQL__HOST=authentik_db
-      - AUTHENTIK_POSTGRESQL__USER=authentik
-      - AUTHENTIK_POSTGRESQL__NAME=authentik
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${POSTGRES_PASSWORD}
-      - AUTHENTIK_OUTPOSTS__DISABLE_EMBEDDED_OUTPOST=true
-    volumes:
-      - authentik_media:/media
-      - authentik_templates:/templates
-    depends_on:
-      authentik_db:
-        condition: service_healthy
-      authentik_redis:
-        condition: service_healthy
-    labels:
-      caddy: auth.fern.garden
-      caddy.reverse_proxy: "{{upstreams 9000}}"
-
-  authentik_worker:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
-    container_name: authentik_worker
-    networks:
-      - default
-    restart: unless-stopped
-    command: worker
-    environment:
-      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
-      - AUTHENTIK_REDIS__HOST=authentik_redis
-      - AUTHENTIK_POSTGRESQL__HOST=authentik_db
-      - AUTHENTIK_POSTGRESQL__USER=authentik
-      - AUTHENTIK_POSTGRESQL__NAME=authentik
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${POSTGRES_PASSWORD}
-      - AUTHENTIK_OUTPOSTS__DISABLE_EMBEDDED_OUTPOST=true
-    user: root
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - authentik_media:/media
-      - authentik_templates:/templates
-      - authentik_certs:/certs
-    depends_on:
-      authentik_db:
-        condition: service_healthy
-      authentik_redis:
-        condition: service_healthy
-
-  authentik_proxy:
-    image: ghcr.io/goauthentik/proxy:${AUTHENTIK_VERSION}
-    container_name: authentik_proxy
-    networks:
-      - default
-      - proxy
-    environment:
-      - AUTHENTIK_HOST=http://authentik:9000
-      - AUTHENTIK_HOST_BROWSER=https://auth.fern.garden
-      - AUTHENTIK_INSECURE=true
-      - AUTHENTIK_TOKEN=${AUTHENTIK_PROXY_TOKEN}
+  authentik_ldap:
+    image: ghcr.io/goauthentik/ldap:${AUTHENTIK_VERSION}
+    container_name: authentik_ldap
     depends_on:
       authentik:
         condition: service_healthy
       authentik_worker:
         condition: service_healthy
-
-  authentik_ldap:
-    image: ghcr.io/goauthentik/ldap:${AUTHENTIK_VERSION}
-    container_name: authentik_ldap
-    networks:
-      - default
-    ports:
-      - 389:3389
-      - 636:6636
     environment:
       - AUTHENTIK_HOST=http://authentik:9000
       - AUTHENTIK_HOST_BROWSER=https://auth.fern.garden
       - AUTHENTIK_INSECURE=true
       - AUTHENTIK_TOKEN=${AUTHENTIK_LDAP_TOKEN}
+    networks:
+      - default
+
+  authentik_proxy:
+    image: ghcr.io/goauthentik/proxy:${AUTHENTIK_VERSION}
+    container_name: authentik_proxy
     depends_on:
       authentik:
         condition: service_healthy
       authentik_worker:
         condition: service_healthy
+    environment:
+      - AUTHENTIK_HOST=http://authentik:9000
+      - AUTHENTIK_HOST_BROWSER=https://auth.fern.garden
+      - AUTHENTIK_INSECURE=true
+      - AUTHENTIK_TOKEN=${AUTHENTIK_PROXY_TOKEN}
+    networks:
+      - default
+      - proxy
+
+  authentik_redis:
+    image: docker.io/library/redis:alpine
+    container_name: authentik_redis
+    volumes:
+      - authentik_redis:/data
+    networks:
+      - default
+    command: --save 60 1 --loglevel warning
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+
+  authentik_worker:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
+    container_name: authentik_worker
+    depends_on:
+      authentik_db:
+        condition: service_healthy
+      authentik_redis:
+        condition: service_healthy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - authentik_media:/media
+      - authentik_templates:/templates
+      - authentik_certs:/certs
+    environment:
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_POSTGRESQL__HOST=authentik_db
+      - AUTHENTIK_POSTGRESQL__USER=authentik
+      - AUTHENTIK_POSTGRESQL__NAME=authentik
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${POSTGRES_PASSWORD}
+      - AUTHENTIK_OUTPOSTS__DISABLE_EMBEDDED_OUTPOST=true
+    networks:
+      - default
+    command: worker
+    restart: unless-stopped
+    user: root
+
+networks:
+  default:
+  proxy:
+    external: true
 
 volumes:
   authentik_db:
@@ -136,8 +139,3 @@ volumes:
     name: authentik_certs
   authentik_templates:
     name: authentik_templates
-
-networks:
-  default:
-  proxy:
-    external: true

@@ -1,19 +1,8 @@
+name: mailserver
 services:
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: mail.ferngarden.net
-    env_file: mailserver.env
-    environment:
-      SSL_TYPE: manual
-      SSL_CERT_PATH: /srv/tls/caddy/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.ferngarden.net/wildcard_.ferngarden.net.crt
-      SSL_KEY_PATH: /srv/tls/caddy/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.ferngarden.net/wildcard_.ferngarden.net.key
-    ports:
-      - "25:25"    # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
-      - "143:143"  # IMAP4 (explicit TLS => STARTTLS)
-      - "465:465"  # ESMTP (implicit TLS)
-      - "587:587"  # ESMTP (explicit TLS => STARTTLS)
-      - "993:993"  # IMAP4 (implicit TLS)
     volumes:
       - mailserver_data:/var/mail/
       - mailserver_state:/var/mail-state/
@@ -21,12 +10,24 @@ services:
       - mailserver_config:/tmp/docker-mailserver/
       - /etc/localtime:/etc/localtime:ro
       - caddy_data:/srv/tls
+    environment:
+      SSL_TYPE: manual
+      SSL_CERT_PATH: /srv/tls/caddy/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.ferngarden.net/wildcard_.ferngarden.net.crt
+      SSL_KEY_PATH: /srv/tls/caddy/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.ferngarden.net/wildcard_.ferngarden.net.key
+    env_file: mailserver.env
+    ports:
+      - '25:25' # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
+      - '143:143' # IMAP4 (explicit TLS => STARTTLS)
+      - '465:465' # ESMTP (implicit TLS)
+      - '587:587' # ESMTP (explicit TLS => STARTTLS)
+      - '993:993' # IMAP4 (implicit TLS)
     restart: always
-    stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
       timeout: 3s
       retries: 0
+    hostname: mail.ferngarden.net
+    stop_grace_period: 1m
 
 volumes:
   mailserver_data:
