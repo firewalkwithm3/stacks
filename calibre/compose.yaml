@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
     volumes:
       - /media/media/calibre/ingest:/cwa-book-ingest
-      - /mnt/docker/calibre-web-automated/downloader/app.db:/auth/app.db:ro
+      - /mnt/docker/calibre-web-automated/config/app.db:/auth/app.db:ro
     labels:
       caddy: books-dl.ferngarden.net
       caddy.import: internal
