@@ -105,6 +105,7 @@ services:
 
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
+    container_name: qbittorrent_mamapi
     volumes:
       - /mnt/docker/qbittorrent_mamapi/data:/data
     network_mode: service:qbittorrent_gluetun
