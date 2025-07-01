@@ -153,6 +153,7 @@ services:
   kapowarr:
     container_name: kapowarr
     image: mrcas/kapowarr:latest
+    user: 1000:1800
     volumes:
       - /mnt/docker/kapowarr/database:/app/db
       - /media:/media
