@@ -104,7 +104,6 @@ services:
       caddy: kapowarr.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 5656 }}'
-    user: 1000:1800
 
   letterboxd-list-radarr:
     image: screeny05/letterboxd-list-radarr:latest
