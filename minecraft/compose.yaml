@@ -4,8 +4,8 @@ services:
     image: itzg/mc-proxy
     container_name: minecraft_proxy
     volumes:
-      - velocity_config:/config
-      - velocity_server:/server
+      - /home/docker/volumes/minecraft/velocity/config:/config
+      - /home/docker/volumes/minecraft/velocity/server:/server
     environment:
       - TYPE=VELOCITY
       - MINECRAFT_VERSION=1.21.5
@@ -14,6 +14,7 @@ services:
     networks:
       - default
     restart: unless-stopped
+    user: 1000:100
 
   minecraft_server_bob:
     image: itzg/minecraft-server
@@ -21,7 +22,7 @@ services:
     depends_on:
       - minecraft_proxy
     volumes:
-      - minecraft_server_bob:/data
+      - /home/docker/volumes/minecraft/servers/bobworld:/data
     environment:
       - MOTD=it's bob's world, we're just living in it
       - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/bob.png
@@ -29,6 +30,7 @@ services:
       - server.env
     restart: unless-stopped
     hostname: bob
+    user: 1000:100
 
   minecraft_server_mc:
     image: itzg/minecraft-server
@@ -36,7 +38,7 @@ services:
     depends_on:
       - minecraft_proxy
     volumes:
-      - minecraft_server_mc:/data
+      - /home/docker/volumes/minecraft/servers/mc:/data
     environment:
       - MOTD=meow
       - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/mc.png
@@ -47,19 +49,7 @@ services:
       - default
     restart: unless-stopped
     hostname: mc
+    user: 1000:100
 
 networks:
   default:
-
-
-volumes:
-  minecraft_webadmin_db:
-    name: minecraft_webadmin_db
-  minecraft_server_mc:
-    name: minecraft_server_mc
-  minecraft_server_bob:
-    name: minecraft_server_bob
-  velocity_config:
-    name: velocity_config
-  velocity_server:
-    name: velocity_server
