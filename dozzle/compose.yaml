@@ -5,7 +5,7 @@ services:
     container_name: dozzle
     environment:
       DOZZLE_AUTH_PROVIDER: forward-proxy
-      DOZZLE_REMOTE_HOST: tcp://docker_socket_proxy:2375|docker.local,tcp://10.0.1.105:2375|minecraft.local,tcp://10.0.1.4:2375|weebill.local
+      DOZZLE_REMOTE_HOST: tcp://docker_socket_proxy:2375|docker.local,tcp://10.0.1.101:2375|minecraft.local,tcp://10.0.1.4:2375|weebill.local
     networks:
       - default
       - metrics
