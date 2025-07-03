@@ -98,7 +98,7 @@ dns.ferngarden.net {
 }
 
 fxsync.fern.garden {
-	reverse_proxy 10.0.1.104:8000
+	reverse_proxy 10.0.1.104:5000
 }
 
 home.fern.garden {
