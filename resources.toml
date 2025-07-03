@@ -11,7 +11,7 @@ enabled = true
 name = "minecraft.local"
 tags = ["spoonbill"]
 [server.config]
-address = "https://10.0.1.105:8120"
+address = "https://10.0.1.101:8120"
 enabled = true
 
 ##
@@ -281,22 +281,6 @@ run_directory = "mailserver"
 ##
 
 [[stack]]
-name = "memos"
-tags = ["internal"]
-[stack.config]
-server = "docker.local"
-links = ["https://memos.ferngarden.net"]
-poll_for_updates = true
-auto_update = true
-linked_repo = "github"
-run_directory = "memos"
-environment = """
-POSTGRES_PASSWORD=[[MEMOS_DB_PASSWORD]]
-"""
-
-##
-
-[[stack]]
 name = "metrics_docker_local"
 tags = ["internal", "metrics"]
 [stack.config]
@@ -423,20 +407,6 @@ linked_repo = "github"
 run_directory = "notifications"
 environment = """
 MOLLY_VAPID_PRIVKEY=[[MOLLY_VAPID_PRIVKEY]]
-"""
-
-##
-
-[[stack]]
-name = "obsidian-livesync"
-tags = ["internal"]
-[stack.config]
-server = "docker.local"
-auto_update = true
-linked_repo = "github"
-run_directory = "obsidian-livesync"
-environment = """
-COUCHDB_PASSWORD=[[OBSIDIAN_LIVESYNC_DB_PASSWORD]]
 """
 
 ##
