@@ -25,9 +25,6 @@ services:
       - INJECT_TORRENTS=true
       - INJECTION_LINK_DIRECTORY=/media/downloads/fertilizer/linked-data
       - QBITTORRENT_URL=http://fern:${QBITTORRENT_PASS}@qbittorrent_gluetun:8080
-    networks:
-      default:
-        ipv4_address: 172.16.7.4
     command: fertilizer -o /media/downloads/fertilizer/torrent-files -i /torrents/qBittorrent/BT_backup --server
     user: 1000:1800
   
@@ -116,10 +113,6 @@ services:
 
 networks:
   default:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.16.7.0/24
   proxy:
     external: true
   media:
