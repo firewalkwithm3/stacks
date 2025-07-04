@@ -20,7 +20,7 @@ services:
       caddy.reverse_proxy: '{{ upstreams 5984 }}'
     restart: unless-stopped
 
- networks:
+networks:
   default:
   proxy:
     external: true   
