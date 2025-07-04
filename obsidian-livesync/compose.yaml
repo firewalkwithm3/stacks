@@ -11,4 +11,16 @@ services:
       - /mnt/docker/obsidian-livesync/config:/opt/couchdb/etc/local.d
     ports:
       - 5984:5984
+    networks:
+      - default
+      - proxy
+    labels:
+      caddy: ols.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 5984 }}'
     restart: unless-stopped
+
+ networks:
+  default:
+  proxy:
+    external: true   
