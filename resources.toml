@@ -412,6 +412,18 @@ MOLLY_VAPID_PRIVKEY=[[MOLLY_VAPID_PRIVKEY]]
 ##
 
 [[stack]]
+name = "obsidian-livesync"
+[stack.config]
+server = "docker.local"
+linked_repo = "github"
+run_directory = "obsidian-livesync"
+environment = """
+COUCHDB_PASSWORD=[[OBSIDIAN_LIVESYNC_DB_PASSWORD]]
+"""
+
+##
+
+[[stack]]
 name = "paperless"
 tags = ["internal"]
 [stack.config]
