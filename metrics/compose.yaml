@@ -16,19 +16,6 @@ services:
       - metrics
     restart: unless-stopped
 
-  glances:
-    image: nicolargo/glances:latest
-    container_name: glances
-    environment:
-      - "GLANCES_OPT=-w"
-    ports:
-      - '61208:61208'
-    networks:
-      - default
-      - metrics
-    restart: always
-    pid: host
-
 networks:
   default:
   metrics:
