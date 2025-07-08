@@ -19,8 +19,7 @@ services:
       caddy: pdf.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 8080 }}'
-    user: 1000:1000
-
+      
 networks:
   default:
   proxy:
