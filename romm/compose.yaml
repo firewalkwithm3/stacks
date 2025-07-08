@@ -25,6 +25,7 @@ services:
       - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}
       - OIDC_REDIRECT_URI=https://games.fern.garden/api/oauth/openid
       - OIDC_SERVER_APPLICATION_URL=https://auth.fern.garden/application/o/romm/
+      - DISABLE_USERPASS_LOGIN=true
       - MOBYGAMES_API_KEY=${MOBYGAMES_API_KEY}
       - IGDB_CLIENT_ID=${IGDB_CLIENT_ID} # Generate an ID and SECRET in IGDB
       - IGDB_CLIENT_SECRET=${IGDB_CLIENT_SECRET} # https://api-docs.igdb.com/#account-creation
