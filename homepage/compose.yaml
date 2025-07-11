@@ -17,7 +17,6 @@ services:
       caddy: dash.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 3000 }}'
-    user: 1000:1000
 
 networks:
   proxy:
