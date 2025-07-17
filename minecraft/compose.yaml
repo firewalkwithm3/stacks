@@ -4,8 +4,8 @@ services:
     image: itzg/mc-proxy
     container_name: minecraft_proxy
     volumes:
-      - /home/docker/volumes/minecraft/velocity/config:/config
-      - /home/docker/volumes/minecraft/velocity/server:/server
+      - /home/fern/docker/data/minecraft/velocity/config:/config
+      - /home/fern/docker/data/minecraft/velocity/server:/server
     environment:
       - TYPE=VELOCITY
       - MINECRAFT_VERSION=1.21.5
@@ -22,7 +22,7 @@ services:
     depends_on:
       - minecraft_proxy
     volumes:
-      - /home/docker/volumes/minecraft/servers/bobworld:/data
+      - /home/fern/docker/data/minecraft/servers/bobworld:/data
     environment:
       - MOTD=it's bob's world, we're just living in it
       - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/bob.png
@@ -38,7 +38,7 @@ services:
     depends_on:
       - minecraft_proxy
     volumes:
-      - /home/docker/volumes/minecraft/servers/mc:/data
+      - /home/fern/docker/data/minecraft/servers/mc:/data
     environment:
       - MOTD=meow
       - ICON=https://git.fern.garden/fern/stacks/raw/branch/main/minecraft/server-icons/mc.png
