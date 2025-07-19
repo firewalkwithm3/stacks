@@ -29,7 +29,7 @@ services:
     env_file: explo.env
     volumes:
       # - ./explo.env:/opt/explo/.env
-      - /media/media/beets/explo:/data/
+      - /media/media/beets/Explo:/data/
       - /media/downloads/slskd/downloads:/slskd/
     networks:
       - default
