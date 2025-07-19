@@ -15,14 +15,32 @@ services:
       - ND_PLAYLISTSPATH=Playlists
     networks:
       - default
+      - media
       - proxy
     restart: unless-stopped
     labels:
       caddy: music.fern.garden
       caddy.import: authentik
 
+  explo:
+    image: ghcr.io/lumepart/explo:latest
+    restart: unless-stopped
+    container_name: explo
+    volumes:
+      - ./explo.env:/opt/explo/.env
+      - /media/media/beets/explo:/data/
+      - /media/downloads/slskd/downloads:/slskd/
+    networks:
+      - default
+      - media
+    environment:
+      - TZ=Australia/Perth
+      - CRON_SCHEDULE=00 07 * * 1 # Runs weekly, every Monday at 07:00
+
 networks:
   default:
+  media:
+    external: true
   proxy:
     external: true
 
