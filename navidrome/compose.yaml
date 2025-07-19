@@ -26,8 +26,9 @@ services:
     image: ghcr.io/lumepart/explo:latest
     restart: unless-stopped
     container_name: explo
+    env_file: explo.env
     volumes:
-      - ./explo.env:/opt/explo/.env
+      # - ./explo.env:/opt/explo/.env
       - /media/media/beets/explo:/data/
       - /media/downloads/slskd/downloads:/slskd/
     networks:
