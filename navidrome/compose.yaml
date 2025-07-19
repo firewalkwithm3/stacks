@@ -36,7 +36,7 @@ services:
       - media
     environment:
       - TZ=Australia/Perth
-      - CRON_SCHEDULE=00 07 * * 1 # Runs weekly, every Monday at 07:00
+      - CRON_SCHEDULE=00 09 * * 2 # Runs weekly, every Tuesday at 09:00.
 
 networks:
   default:
