@@ -1,5 +1,21 @@
 name: minecraft
 services:
+  crafty-controller:
+      container_name: crafty-contraller
+      image: registry.gitlab.com/crafty-controller/crafty-4:latest
+      restart: always
+      environment:
+          - TZ=Australia/Perth
+      ports:
+          - "8443:8443" # HTTPS
+          - "8123:8123" # DYNMAP
+      volumes:
+          - /home/fern/docker/data/minecraft/crafty-controller/backups:/crafty/backups
+          - /home/fern/docker/data/minecraft/crafty-controller/logs:/crafty/logs
+          - /home/fern/docker/data/minecraft/crafty-controller/servers:/crafty/servers
+          - /home/fern/docker/data/minecraft/crafty-controller/config:/crafty/app/config
+          - /home/fern/docker/data/minecraft/crafty-controller/import:/crafty/import
+          
   minecraft_proxy:
     image: itzg/mc-proxy
     container_name: minecraft_proxy
