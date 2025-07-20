@@ -104,3 +104,12 @@ fxsync.fern.garden {
 home.fern.garden {
 	reverse_proxy 10.0.1.103:8123
 }
+
+crafty.ferngarden.net {
+  import internal
+	reverse_proxy 10.0.1.101:8443 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
