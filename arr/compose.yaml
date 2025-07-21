@@ -126,7 +126,7 @@ services:
     restart: unless-stopped
 
   lidarr:
-    image: blampe/lidarr:latest
+    image: ghcr.io/linuxserver-labs/prarr:lidarr-plugins
     container_name: lidarr
     volumes:
       - lidarr_config:/config
