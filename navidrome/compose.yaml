@@ -22,22 +22,6 @@ services:
       caddy: music.fern.garden
       caddy.import: authentik
 
-  explo:
-    image: ghcr.io/lumepart/explo:latest
-    restart: unless-stopped
-    container_name: explo
-    env_file: explo.env
-    volumes:
-      # - ./explo.env:/opt/explo/.env
-      - /media/media/beets/Explo:/data/
-      - /media/downloads/slskd/downloads:/slskd/
-    networks:
-      - default
-      - media
-    environment:
-      - TZ=Australia/Perth
-      - CRON_SCHEDULE=00 09 * * 2 # Runs weekly, every Tuesday at 09:00.
-
 networks:
   default:
   media:
