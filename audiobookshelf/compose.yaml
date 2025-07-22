@@ -5,8 +5,8 @@ services:
     image: ghcr.io/advplyr/audiobookshelf:latest
     container_name: audiobookshelf
     volumes:
-      - audiobookshelf_config:/config
-      - audiobookshelf_metadata:/metadata
+      - /home/fern/docker/data/audiobookshelf/config:/config
+      - /home/fern/docker/data/audiobookshelf/metadata:/metadata
       - /media:/media
     environment:
       - TZ=Australia/Perth
@@ -22,9 +22,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  audiobookshelf_config:
-    name: audiobookshelf_config
-  audiobookshelf_metadata:
-    name: audiobookshelf_metadata
