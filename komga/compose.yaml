@@ -4,7 +4,7 @@ services:
     image: gotson/komga
     container_name: komga
     volumes:
-      - komga_config:/config
+      - /home/fern/docker/data/komga/config:/config
       - /media:/media:ro
     environment:
       - TZ=Australia/Perth
@@ -25,7 +25,3 @@ networks:
     external: true
   proxy:
     external: true
-
-volumes:
-  komga_config:
-    name: komga_config
