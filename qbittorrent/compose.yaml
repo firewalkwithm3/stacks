@@ -4,7 +4,7 @@ services:
     image: ghcr.io/cross-seed/cross-seed:6
     container_name: cross-seed
     volumes:
-      - cross-seed_config:/config
+      - /home/fern/docker/data/qbittorrent/cross-seed/config:/config
       - /media:/media
     networks:
       - default
@@ -17,7 +17,7 @@ services:
     image: ghcr.io/moleculekayak/fertilizer:latest
     container_name: fertilizer
     volumes:
-      - qbittorrent_config:/torrents:ro
+      - /home/fern/docker/data/qbittorrent/qbittorrent/config:/torrents:ro
       - /media:/media
     environment:
       - OPS_KEY=${OPS_KEY}
@@ -35,7 +35,7 @@ services:
       qbittorrent_gluetun:
         condition: service_healthy
     volumes:
-      - qbittorrent_config:/config
+      - /home/fern/docker/data/qbittorrent/qbittorrent/config:/config
       - /media:/media
     environment:
       - WEBUI_PORT=8080
@@ -54,7 +54,7 @@ services:
     image: qmcgaw/gluetun
     container_name: qbittorrent_gluetun
     volumes:
-      - qbittorrent_gluetun_auth:/gluetun/auth
+      - /home/fern/docker/data/qbittorrent/gluetun/auth:/gluetun/auth
     environment:
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=wireguard
@@ -104,7 +104,7 @@ services:
     image: elforkhead/mamapi:latest
     container_name: qbittorrent_mamapi
     volumes:
-      - /mnt/docker/qbittorrent_mamapi/data:/data
+      - /home/fern/docker/data/qbittorrent/mamapi/data:/data
     network_mode: service:qbittorrent_gluetun
     environment:
       TZ: Australia/Perth
@@ -117,11 +117,3 @@ networks:
     external: true
   media:
     external: true
-
-volumes:
-  qbittorrent_config:
-    name: qbittorrent_config
-  qbittorrent_gluetun_auth:
-    name: qbittorrent_gluetun_auth
-  cross-seed_config:
-    name: cross-seed_config
