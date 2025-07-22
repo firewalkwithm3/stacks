@@ -6,7 +6,7 @@ services:
       - linkwarden_db
       - linkwarden_search
     volumes:
-      - /mnt/docker/linkwarden/data:/data/data
+      - /home/fern/docker/data/linkwarden/data:/data/data
     environment:
       - DATABASE_URL=postgresql://linkwarden:${POSTGRES_PASSWORD}@linkwarden_db:5432/linkwarden
       - MEILI_HOST=linkwarden_search
@@ -28,7 +28,7 @@ services:
     image: postgres:16-alpine
     container_name: linkwarden_db
     volumes:
-      - /mnt/docker/linkwarden/database:/var/lib/postgresql/data
+      - /home/fern/docker/data/linkwarden/database:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=linkwarden
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -40,7 +40,7 @@ services:
     image: getmeili/meilisearch:v1.12.8
     container_name: linkwarden_search
     volumes:
-      - /mnt/docker/linkwarden/search:/meili_data
+      - /home/fern/docker/data/linkwarden/search:/meili_data
     networks:
       - default
     restart: always
