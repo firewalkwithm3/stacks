@@ -4,7 +4,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     volumes:
-      - vaultwarden_data:/data
+      - /home/fern/docker/data/vaultwarden/data:/data
     environment:
       - DOMAIN=https://vault.ferngarden.net
       - SMTP_HOST=mail.ferngarden.net
@@ -26,7 +26,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  vaultwarden_data:
-    name: vaultwarden_data

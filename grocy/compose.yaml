@@ -4,7 +4,7 @@ services:
     image: lscr.io/linuxserver/grocy:latest
     container_name: grocy
     volumes:
-      - grocy_config:/config
+      - /home/fern/docker/data/grocy/config:/config
     environment:
       - PUID=1000
       - PGID=1000
@@ -28,7 +28,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  grocy_config:
-    name: grocy_config

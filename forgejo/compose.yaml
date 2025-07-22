@@ -4,7 +4,7 @@ services:
     image: postgres:14
     container_name: forgejo_db
     volumes:
-      - forgejo_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/forgejo/database:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=forgejo
       - POSTGRES_DB=forgejo
@@ -18,7 +18,7 @@ services:
     depends_on:
       - forgejo_db
     volumes:
-      - forgejo_data:/data
+      - /home/fern/docker/data/forgejo/data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -43,9 +43,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  forgejo_data:
-    name: forgejo_data
-  forgejo_db:
-    name: forgejo_db

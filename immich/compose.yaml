@@ -7,7 +7,7 @@ services:
       - immich_db
       - immich_redis
     volumes:
-      - immich_library:/usr/src/app/upload
+      - /home/fern/docker/data/immich/library:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
     environment:
       - DB_USERNAME=postgres
@@ -31,7 +31,7 @@ services:
     image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1
     container_name: immich_db
     volumes:
-      - immich_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/immich/database:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=postgres
@@ -46,7 +46,7 @@ services:
     image: ghcr.io/immich-app/immich-machine-learning:release
     container_name: immich_ml
     volumes:
-      - immich_ml_cache:/cache
+      - /home/fern/docker/data/immich/ml_cache:/cache
     networks:
       - default
     restart: unless-stopped
@@ -68,11 +68,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  immich_library:
-    name: immich_library
-  immich_ml_cache:
-    name: immich_ml_cache
-  immich_db:
-    name: immich_db

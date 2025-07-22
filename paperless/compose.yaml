@@ -7,8 +7,8 @@ services:
       - paperless_db
       - paperless_redis
     volumes:
-      - paperless_data:/usr/src/paperless/data
-      - paperless_media:/usr/src/paperless/media
+      - /home/fern/docker/data/paperless/data:/usr/src/paperless/data
+      - /home/fern/docker/data/paperless/media:/usr/src/paperless/media
     environment:
       PAPERLESS_REDIS: redis://paperless_redis:6379
       PAPERLESS_DBHOST: paperless_db
@@ -54,7 +54,7 @@ services:
     image: docker.io/library/postgres:17
     container_name: paperless_db
     volumes:
-      - paperless_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/paperless/database:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: paperless
       POSTGRES_USER: paperless
@@ -62,11 +62,12 @@ services:
     networks:
       - default
     restart: unless-stopped
+
   paperless_redis:
     image: docker.io/library/redis:8
     container_name: paperless_redis
     volumes:
-      - paperless_redis:/data
+      - /home/fern/docker/data/paperless/redis:/data
     networks:
       - default
     restart: unless-stopped
@@ -75,13 +76,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  paperless_data:
-    name: paperless_data
-  paperless_media:
-    name: paperless_media
-  paperless_db:
-    name: paperless_db
-  paperless_redis:
-    name: paperless_redis

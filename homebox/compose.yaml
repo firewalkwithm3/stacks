@@ -4,7 +4,7 @@ services:
     image: ghcr.io/sysadminsmedia/homebox:latest-rootless
     container_name: homebox
     volumes:
-      - homebox_data:/data/
+      - /home/fern/docker/data/homebox/data:/data/
     environment:
       - HBOX_LOG_LEVEL=info
       - HBOX_LOG_FORMAT=text
@@ -23,7 +23,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  homebox_data:
-    name: homebox_data
