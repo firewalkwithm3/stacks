@@ -4,10 +4,10 @@ services:
     image: jellyfin/jellyfin
     container_name: jellyfin
     volumes:
-      - jellyfin_cache:/var/cache/jellyfin
-      - jellyfin_config:/etc/jellyfin
-      - jellyfin_data:/var/lib/jellyfin
-      - jellyfin_logs:/var/log/jellyfin
+      - /home/fern/docker/data/jellyfin/cache:/var/cache/jellyfin
+      - /home/fern/docker/data/jellyfin/config:/etc/jellyfin
+      - /home/fern/docker/data/jellyfin/data:/var/lib/jellyfin
+      - /home/fern/docker/data/jellyfin/logs:/var/log/jellyfin
       - /media:/media
     environment:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.fern.garden
@@ -89,14 +89,6 @@ networks:
     external: true
 
 volumes:
-  jellyfin_config:
-    name: jellyfin_config
-  jellyfin_cache:
-    name: jellyfin_cache
-  jellyfin_data:
-    name: jellyfin_data
-  jellyfin_logs:
-    name: jellyfin_logs
   jellystat_db:
     name: jellystat_db
   jellystat_data:
