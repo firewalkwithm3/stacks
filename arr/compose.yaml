@@ -244,4 +244,4 @@ networks:
   proxy:
     external: true
   media:
-    name: media
+    external: true
