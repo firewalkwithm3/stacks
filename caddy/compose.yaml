@@ -7,7 +7,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./files:/etc/caddy/Caddyfile
       - /srv:/srv
-      - caddy_data:/data
+      - /home/fern/docker/data/caddy/data:/data
     environment:
       - CADDY_INGRESS_NETWORKS=proxy
       - CF_API_TOKEN=${CF_API_TOKEN}
@@ -20,16 +20,9 @@ services:
     networks:
       - default
       - proxy
-      - traefik
     restart: unless-stopped
 
 networks:
   default:
   proxy:
     external: true
-  traefik:
-    external: true
-
-volumes:
-  caddy_data:
-    name: caddy_data
