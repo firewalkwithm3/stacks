@@ -6,7 +6,7 @@ services:
     depends_on:
       - synapse_db
     volumes:
-      - synapse_data:/data
+      - /home/fern/docker/data/synapse/data:/data
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
     networks:
@@ -20,7 +20,7 @@ services:
 
       caddy_1: matrix.fern.garden
       caddy_1.handle.1_encode: zstd gzip
-      caddy_1.handle.2_reverse_proxy: matrix-traefik:8080
+      caddy_1.handle.2_reverse_proxy: 10.0.1.106:8080
       caddy_1.handle.2_reverse_proxy.1_header_up: X-Forwarded-Port {http.request.port}
       caddy_1.handle.2_reverse_proxy.2_header_up: X-Forwarded-TlsProto {tls_protocol}
       caddy_1.handle.2_reverse_proxy.3_header_up: X-Forwarded-TlsCipher {tls_cipher}
@@ -28,7 +28,7 @@ services:
 
       caddy_2: matrix.fern.garden:8448
       caddy_2.handle.1_encode: zstd gzip
-      caddy_2.handle.2_reverse_proxy: matrix-traefik:8448
+      caddy_2.handle.2_reverse_proxy: 10.0.1.106:8448
       caddy_2.handle.2_reverse_proxy.1_header_up: X-Forwarded-Port {http.request.port}
       caddy_2.handle.2_reverse_proxy.2_header_up: X-Forwarded-TlsProto {tls_protocol}
       caddy_2.handle.2_reverse_proxy.3_header_up: X-Forwarded-TlsCipher {tls_cipher}
@@ -38,7 +38,7 @@ services:
     image: docker.io/postgres:16-alpine
     container_name: synapse_db
     volumes:
-      - synapse_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/synapse/database:/var/lib/postgresql/data
     networks:
       - default
     restart: unless-stopped
@@ -47,9 +47,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  synapse_data:
-    name: synapse_data
-  synapse_db:
-    name: synapse_db
