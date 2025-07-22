@@ -101,6 +101,10 @@ fxsync.fern.garden {
 	reverse_proxy 10.0.1.104:5000
 }
 
+cloud.ferngarden.net {
+	reverse_proxy 10.0.1.107:80
+}
+
 home.fern.garden {
 	reverse_proxy 10.0.1.103:8123
 }
