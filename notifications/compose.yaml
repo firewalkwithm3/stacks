@@ -4,7 +4,7 @@ services:
     image: ghcr.io/mollyim/mollysocket:1
     container_name: mollysocket
     volumes:
-      - mollysocket_data:/data
+      - /home/fern/docker/data/mollysocket/data:/data
     environment:
       - MOLLY_DB=/data/mollysocket.db
       - MOLLY_ALLOWED_ENDPOINTS=["https://ntfy.fern.garden"]
@@ -26,9 +26,9 @@ services:
     image: binwiederhier/ntfy
     container_name: ntfy
     volumes:
-      - ntfy_cache:/var/cache/ntfy
-      - ntfy_config:/etc/ntfy
-      - ntfy_data:/var/lib/ntfy
+      - /home/fern/docker/data/ntfy/cache:/var/cache/ntfy
+      - /home/fern/docker/data/ntfy/config:/etc/ntfy
+      - /home/fern/docker/data/ntfy/data:/var/lib/ntfy
     networks:
       - default
       - proxy
@@ -48,17 +48,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  ntfy_cache:
-    name: ntfy_cache
-  ntfy_config:
-    name: ntfy_config
-  ntfy_data:
-    name: ntfy_data
-  mollysocket_data:
-    name: mollysocket_data
-  apprise-api_config:
-    name: apprise-api_config
-  apprise-api_attachments:
-    name: apprise-api_attachments
