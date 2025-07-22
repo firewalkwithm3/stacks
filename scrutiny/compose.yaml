@@ -5,8 +5,8 @@ services:
     container_name: scrutiny
     volumes:
       - /run/udev:/run/udev:ro
-      - /mnt/docker/scrutiny/influxdb:/opt/scrutiny/influxdb
-      - /mnt/docker/scrutiny/config:/opt/scrutiny/config
+      - /home/fern/docker/data/scrutiny/influxdb:/opt/scrutiny/influxdb
+      - /home/fern/docker/data/scrutiny/config:/opt/scrutiny/config
     networks:
       - default
       - proxy
