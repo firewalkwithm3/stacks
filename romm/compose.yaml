@@ -44,7 +44,7 @@ services:
     image: mariadb:latest
     container_name: romm_db
     volumes:
-      - romm_db:/var/lib/mysql
+      - /home/fern/docker/data/romm/database:/var/lib/mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD} # Use a unique, secure password
       - MARIADB_DATABASE=romm
