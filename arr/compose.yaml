@@ -5,7 +5,7 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     volumes:
-      - /home/fern/docker/data/bazarr/config:/config
+      - /home/fern//docker/data/arr/bazarr/config:/config
       - /media:/media
     environment:
       - PUID=1000
@@ -25,7 +25,7 @@ services:
     image: ghcr.io/cleanuparr/cleanuparr:latest
     container_name: cleanuparr
     volumes:
-      - /home/fern/docker/data/cleanuparr/config:/config
+      - /home/fern//docker/data/arr/cleanuparr/config:/config
       - /media:/media
     environment:
       - TZ=Australia/Perth
@@ -57,8 +57,8 @@ services:
     image: lscr.io/linuxserver/jackett:latest
     container_name: jackett
     volumes:
-      - /home/fern/docker/data/jackett/config:/config
-      - /home/fern/docker/data/jackett/downloads:/downloads
+      - /home/fern//docker/data/arr/jackett/config:/config
+      - /home/fern//docker/data/arr/jackett/downloads:/downloads
     environment:
       - PUID=1000
       - PGID=1800
@@ -77,7 +77,7 @@ services:
     image: ghcr.io/fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     volumes:
-      - /home/fern/docker/data/jellyseerr/config:/app/config
+      - /home/fern//docker/data/arr/jellyseerr/config:/app/config
     environment:
       - LOG_LEVEL=debug
       - TZ=Australia/Perth
@@ -95,7 +95,7 @@ services:
     image: mrcas/kapowarr:latest
     container_name: kapowarr
     volumes:
-      - /home/fern/docker/data/kapowarr/database:/app/db
+      - /home/fern//docker/data/arr/kapowarr/database:/app/db
       - /media:/media
     networks:
       - default
@@ -121,7 +121,7 @@ services:
     image: redis:6.0
     container_name: letterboxd-list-radarr_redis
     volumes:
-      - /home/fern/docker/data/letterboxd-list-radarr/redis:/data
+      - /home/fern//docker/data/arr/letterboxd-list-radarr/redis:/data
     networks:
       - default
     restart: unless-stopped
@@ -130,8 +130,8 @@ services:
     image: ghcr.io/linuxserver-labs/prarr:lidarr-plugins
     container_name: lidarr
     volumes:
-      - /home/fern/docker/data/lidarr/config:/config
-      - /home/fern/docker/data/beets/config:/beets
+      - /home/fern//docker/data/arr/lidarr/config:/config
+      - /home/fern//docker/data/arr/beets/config:/beets
       - ./install_beets.bash:/custom-cont-init.d/install_beets.bash:ro
       - /media:/media
     environment:
@@ -152,7 +152,7 @@ services:
     image: santiagosayshey/profilarr:latest
     container_name: profilarr
     volumes:
-      - /home/fern/docker/data/profilarr/config:/config
+      - /home/fern//docker/data/arr/profilarr/config:/config
     environment:
       - TZ=Australia/Perth
     networks:
@@ -169,7 +169,7 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     volumes:
-      - /home/fern/docker/data/prowlarr/config:/config
+      - /home/fern//docker/data/arr/prowlarr/config:/config
     environment:
       - PUID=1000
       - PGID=1800
@@ -188,7 +188,7 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     volumes:
-      - /home/fern/docker/data/radarr/config:/config
+      - /home/fern//docker/data/arr/radarr/config:/config
       - /media:/media
     environment:
       - PUID=1000
@@ -208,7 +208,7 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     volumes:
-      - /home/fern/docker/data/sonarr/config:/config
+      - /home/fern//docker/data/arr/sonarr/config:/config
       - /media:/media
     environment:
       - PUID=1000
@@ -229,7 +229,7 @@ services:
     container_name: soularr
     volumes:
       - /media:/media
-      - /home/fern/docker/data/soularr/config:/data
+      - /home/fern//docker/data/arr/soularr/config:/data
     environment:
       - TZ=Australia/Perth
       - SCRIPT_INTERVAL=300
