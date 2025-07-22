@@ -4,7 +4,7 @@ services:
     image: crocodilestick/calibre-web-automated:latest
     container_name: calibre-web-automated
     volumes:
-      - /mnt/docker/calibre-web-automated/config:/config
+      - /home/fern/docker/data/calibre/config:/config
       - /media/media/calibre/ingest:/cwa-book-ingest
       - /media/media/calibre/library:/calibre-library
     environment:
