@@ -4,12 +4,12 @@ services:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
     volumes:
-      - mailserver_data:/var/mail/
-      - mailserver_state:/var/mail-state/
-      - mailserver_logs:/var/log/mail/
-      - mailserver_config:/tmp/docker-mailserver/
+      - /home/fern/docker/data/mailserver/data:/var/mail/
+      - /home/fern/docker/data/mailserver/state:/var/mail-state/
+      - /home/fern/docker/data/mailserver/logs:/var/log/mail/
+      - /home/fern/docker/data/mailserver/config:/tmp/docker-mailserver/
       - /etc/localtime:/etc/localtime:ro
-      - caddy_data:/srv/tls
+      - /home/fern/docker/data/caddy/data:/srv/tls
     environment:
       SSL_TYPE: manual
       SSL_CERT_PATH: /srv/tls/caddy/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.ferngarden.net/wildcard_.ferngarden.net.crt
@@ -28,15 +28,3 @@ services:
       retries: 0
     hostname: mail.ferngarden.net
     stop_grace_period: 1m
-
-volumes:
-  mailserver_data:
-    name: mailserver_data
-  mailserver_state:
-    name: mailserver_state
-  mailserver_logs:
-    name: mailserver_logs
-  mailserver_config:
-    name: mailserver_config
-  caddy_data:
-    external: true
