@@ -5,7 +5,7 @@ services:
     container_name: caddy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./files:/etc/caddy/Caddyfile
       - /srv:/srv
       - caddy_data:/data
     environment:
