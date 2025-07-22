@@ -10,8 +10,8 @@ services:
       authentik_redis:
         condition: service_healthy
     volumes:
-      - authentik_media:/media
-      - authentik_templates:/templates
+      - /home/fern/docker/data/authentik/media:/media
+      - /home/fern/docker/data/authentik/templates:/templates
     environment:
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       - AUTHENTIK_REDIS__HOST=authentik_redis
@@ -32,7 +32,7 @@ services:
     image: docker.io/library/postgres:16-alpine
     container_name: authentik_db
     volumes:
-      - authentik_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/authentik/database:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=authentik
       - POSTGRES_DB=authentik
@@ -84,7 +84,7 @@ services:
     image: docker.io/library/redis:alpine
     container_name: authentik_redis
     volumes:
-      - authentik_redis:/data
+      - /home/fern/docker/data/authentik/redis:/data
     networks:
       - default
     command: --save 60 1 --loglevel warning
@@ -106,9 +106,9 @@ services:
         condition: service_healthy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - authentik_media:/media
-      - authentik_templates:/templates
-      - authentik_certs:/certs
+      - /home/fern/docker/data/authentik/media:/media
+      - /home/fern/docker/data/authentik/templates:/templates
+      - /home/fern/docker/data/authentik/certs:/certs
     environment:
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       - AUTHENTIK_REDIS__HOST=authentik_redis
