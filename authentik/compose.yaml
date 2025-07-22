@@ -62,6 +62,7 @@ services:
       - AUTHENTIK_TOKEN=${AUTHENTIK_LDAP_TOKEN}
     networks:
       - default
+      - proxy
 
   authentik_proxy:
     image: ghcr.io/goauthentik/proxy:${AUTHENTIK_VERSION}
