@@ -4,11 +4,11 @@ services:
     image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
     container_name: stirling-pdf
     volumes:
-      - /mnt/docker/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
-      - /mnt/docker/stirling-pdf/extraConfigs:/configs
-      - /mnt/docker/stirling-pdf/customFiles:/customFiles/
-      - /mnt/docker/stirling-pdf/logs:/logs/
-      - /mnt/docker/stirling-pdf/pipeline:/pipeline/
+      - /home/fern/docker/data/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - /home/fern/docker/data/stirling-pdf/extraConfigs:/configs
+      - /home/fern/docker/data/stirling-pdf/customFiles:/customFiles/
+      - /home/fern/docker/data/stirling-pdf/logs:/logs/
+      - /home/fern/docker/data/stirling-pdf/pipeline:/pipeline/
     environment:
       - DOCKER_ENABLE_SECURITY=false
       - LANGS=en_GB
