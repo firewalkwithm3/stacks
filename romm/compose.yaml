@@ -8,10 +8,10 @@ services:
         condition: service_healthy
         restart: true
     volumes:
-      - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
-      - romm_redis:/redis-data # Cached data for background tasks
-      - romm_assets:/romm/assets # Uploaded saves, states, etc.
-      - romm_config:/romm/config # Path where config.yml is stored
+      - /home/fern/docker/data/romm/resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+      - /home/fern/docker/data/romm/redis:/redis-data # Cached data for background tasks
+      - /home/fern/docker/data/romm/assets:/romm/assets # Uploaded saves, states, etc.
+      - /home/fern/docker/data/romm/config:/romm/config # Path where config.yml is stored
       - /media/media/romm:/romm/library/roms:ro # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
     environment:
       - DB_HOST=romm_db
@@ -65,15 +65,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  romm_db:
-    name: romm_db
-  romm_resources:
-    name: romm_resources
-  romm_redis:
-    name: romm_redis
-  romm_assets:
-    name: romm_assets
-  romm_config:
-    name: romm_config
