@@ -4,7 +4,7 @@ services:
     image: deluan/navidrome:latest
     container_name: navidrome
     volumes:
-      - navidrome_data:/data
+      - /home/fern/docker/data/navidrome/data:/data
       - /media/media/beets:/music:ro
     environment:
       - ND_BASEURL=https://music.fern.garden
@@ -28,7 +28,3 @@ networks:
     external: true
   proxy:
     external: true
-
-volumes:
-  navidrome_data:
-    name: navidrome_data
