@@ -19,4 +19,4 @@ services:
 networks:
   default:
   metrics:
-    name: metrics
+    external: true
