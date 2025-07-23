@@ -1,4 +1,4 @@
-name: wallosf
+name: wallos
 services:
   wallos:
     image: bellamy/wallos:latest
