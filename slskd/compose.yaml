@@ -4,7 +4,7 @@ services:
     image: slskd/slskd:latest
     container_name: slskd
     volumes:
-      - /mnt/docker/slskd/data:/app
+      - /home/fern/docker/data/slskd/data:/app
       - /media:/media
     environment:
       - SLSKD_REMOTE_CONFIGURATION=true

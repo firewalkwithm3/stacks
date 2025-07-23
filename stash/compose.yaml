@@ -6,11 +6,11 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /media/downloads/porn:/data:ro
-      - stash_config:/root/.stash
-      - stash_metadata:/metadata
-      - stash_cache:/cache
-      - stash_blobs:/blobs
-      - stash_generated:/generated
+      - /home/fern/docker/data/stash/config:/root/.stash
+      - /home/fern/docker/data/stash/metadata:/metadata
+      - /home/fern/docker/data/stash/cache:/cache
+      - /home/fern/docker/data/stash/blobs:/blobs
+      - /home/fern/docker/data/stash/generated:/generated
     environment:
       - STASH_STASH=/data/
       - STASH_GENERATED=/generated/
@@ -33,15 +33,3 @@ networks:
     external: true
   media:
     external: true
-
-volumes:
-  stash_config:
-    name: stash_config
-  stash_metadata:
-    name: stash_metadata
-  stash_cache:
-    name: stash_cache
-  stash_blobs:
-    name: stash_blobs
-  stash_generated:
-    name: stash_generated

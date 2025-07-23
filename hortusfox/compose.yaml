@@ -6,11 +6,11 @@ services:
     depends_on:
       - hortusfox_db
     volumes:
-      - hortusfox_images:/var/www/html/public/img
-      - hortusfox_logs:/var/www/html/hortusfox/logs
-      - hortusfox_backup:/var/www/html/public/backup
-      - hortusfox_themes:/var/www/html/public/themes
-      - hortusfox_migrate:/var/www/html/hortusfox/migrations
+      - /home/fern/docker/data/hortusfox/images:/var/www/html/public/img
+      - /home/fern/docker/data/hortusfox/logs:/var/www/html/hortusfox/logs
+      - /home/fern/docker/data/hortusfox/backup:/var/www/html/public/backup
+      - /home/fern/docker/data/hortusfox/themes:/var/www/html/public/themes
+      - /home/fern/docker/data/hortusfox/migrate:/var/www/html/hortusfox/migrations
     environment:
       APP_ADMIN_EMAIL: mail@fern.garden
       APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD}
@@ -33,7 +33,7 @@ services:
     image: mariadb
     container_name: hortusfox_db
     volumes:
-      - hortusfox_db:/var/lib/mysql
+      - /home/fern/docker/data/hortusfox/database:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: hortusfox
@@ -47,13 +47,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  hortusfox_db:
-  hortusfox_images:
-  hortusfox_logs:
-  hortusfox_backup:
-  hortusfox_themes:
-  hortusfox_migrate:
-
-

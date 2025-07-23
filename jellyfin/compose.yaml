@@ -39,7 +39,7 @@ services:
     depends_on:
       - jellystat_db
     volumes:
-      - jellystat_data:/app/backend/backup-data
+      - /home/fern/docker/data/jellystat/data:/app/backend/backup-data
     environment:
       POSTGRES_USER: jellystat
       POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
@@ -67,7 +67,7 @@ services:
     image: postgres:15.2
     container_name: jellystat_db
     volumes:
-      - jellystat_db:/var/lib/postgresql/data
+      - /home/fern/docker/data/jellystat/database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: jellystat
       POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
@@ -87,9 +87,3 @@ networks:
     external: true
   proxy:
     external: true
-
-volumes:
-  jellystat_db:
-    name: jellystat_db
-  jellystat_data:
-    name: jellystat_data
