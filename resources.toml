@@ -379,15 +379,8 @@ SLSKD_API_KEY=[[EXPLO_SLSKD_API_KEY]]
 
 [[stack]]
 name = "nextcloud-aio"
-tags = ["internal"]
 [stack.config]
 server = "vm/docker"
-links = [
-  "https://cloud.ferngarden.net",
-  "https://docker.local:8080"
-]
-poll_for_updates = true
-auto_update = true
 linked_repo = "github"
 run_directory = "nextcloud-aio"
 
@@ -620,7 +613,6 @@ image_registry.account = "firewalkwithm3"
 [[repo]]
 name = "github"
 [repo.config]
-server = "vm/docker"
 builder = "docker.local"
 git_account = "firewalkwithm3"
 repo = "firewalkwithm3/stacks"
@@ -631,7 +623,7 @@ repo = "firewalkwithm3/stacks"
 name = "docker.local"
 [builder.config]
 type = "Server"
-params.server_id = "vm/docker"
+params = {}
 
 ##
 
