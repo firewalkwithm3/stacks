@@ -3,6 +3,9 @@ services:
   cross-seed:
     image: ghcr.io/cross-seed/cross-seed:6
     container_name: cross-seed
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/cross-seed/config:/config
       - /media:/media
@@ -16,6 +19,9 @@ services:
   fertilizer:
     image: ghcr.io/moleculekayak/fertilizer:latest
     container_name: fertilizer
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/torrents:ro
       - /media:/media
@@ -81,6 +87,9 @@ services:
   qbittorrent_qsticky:
     image: ghcr.io/monstermuffin/qsticky:latest
     container_name: qbittorrent_qsticky
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
     environment:
       - QBITTORRENT_HOST=qbittorrent_gluetun
       - QBITTORRENT_HTTPS=false
@@ -103,6 +112,9 @@ services:
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
     container_name: qbittorrent_mamapi
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/mamapi/data:/data
     network_mode: service:qbittorrent_gluetun
