@@ -5,6 +5,7 @@ services:
     container_name: homepage
     volumes:
       - /home/fern/docker/data/homepage/config:/app/config
+      - /home/fern/docker/data/homepage/icons:/app/public/icons
       - /media:/media:ro
     environment:
       HOMEPAGE_ALLOWED_HOSTS: dash.ferngarden.net
