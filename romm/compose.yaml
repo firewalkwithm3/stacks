@@ -26,12 +26,11 @@ services:
       - OIDC_REDIRECT_URI=https://games.fern.garden/api/oauth/openid
       - OIDC_SERVER_APPLICATION_URL=https://auth.fern.garden/application/o/romm/
       - DISABLE_USERPASS_LOGIN=true
-      - MOBYGAMES_API_KEY=${MOBYGAMES_API_KEY}
+      - HASHEOUS_API_ENABLED=true
       - IGDB_CLIENT_ID=${IGDB_CLIENT_ID} # Generate an ID and SECRET in IGDB
       - IGDB_CLIENT_SECRET=${IGDB_CLIENT_SECRET} # https://api-docs.igdb.com/#account-creation
-      - SCREENSCRAPER_USER=mondas # Use your ScreenScraper username and password
-      - SCREENSCRAPER_PASSWORD=${SCREENSCRAPER_PASSWORD} # https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#screenscraper
       - STEAMGRIDDB_API_KEY=${STEAMGRIDDB_API_KEY} # https://github.com/rommapp/romm/wiki/Metadata-Providers#steamgriddb
+      - RETROACHIEVEMENTS_API_KEY=${RETROACHIEVEMENTS_API_KEY}
     networks:
       - default
       - proxy
