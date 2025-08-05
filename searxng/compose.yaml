@@ -32,6 +32,10 @@ services:
       options:
         max-size: "1m"
         max-file: "1"
+    labels:
+      caddy: search.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{ upstreams 8080 }}"
 
 networks:
   default:
