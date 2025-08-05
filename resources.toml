@@ -281,17 +281,6 @@ run_directory = "mailserver"
 ##
 
 [[stack]]
-name = "metrics"
-template = true
-[stack.config]
-poll_for_updates = true
-auto_update = true
-linked_repo = "github"
-run_directory = "metrics"
-
-##
-
-[[stack]]
 name = "metrics_vm_docker"
 tags = ["internal", "metrics"]
 [stack.config]
@@ -478,9 +467,8 @@ MARIADB_ROOT_PASSWORD=[[ROMM_DB_ROOT_PASSWORD]]
 ROMM_AUTH_SECRET_KEY=[[ROMM_AUTH_KEY]]
 IGDB_CLIENT_ID=[[IGDB_CLIENT_ID]]
 IGDB_CLIENT_SECRET=[[IGDB_CLIENT_SECRET]]
-SCREENSCRAPER_PASSWORD=[[SCREENSCRAPER_PASSWORD]]
 STEAMGRIDDB_API_KEY=[[STEAMGRIDDB_API_KEY]]
-MOBYGAMES_API_KEY=[[MOBYGAMES_API_KEY]]
+RETROACHIEVEMENTS_API_KEY=[[ROMM_RETROACHIEVEMENTS_API_KEY]]
 OIDC_CLIENT_ID=[[ROMM_OIDC_CLIENT_ID]]
 OIDC_CLIENT_SECRET=[[ROMM_OIDC_CLIENT_SECRET]]
 """
