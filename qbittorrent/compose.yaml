@@ -19,6 +19,7 @@ services:
   fertilizer:
     image: ghcr.io/moleculekayak/fertilizer:latest
     container_name: fertilizer
+    restart: unless-stopped
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -112,6 +113,7 @@ services:
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
     container_name: qbittorrent_mamapi
+    restart: unless-stopped
     depends_on:
       qbittorrent:
         condition: service_healthy
