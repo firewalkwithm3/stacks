@@ -487,6 +487,17 @@ run_directory = "scrutiny"
 ##
 
 [[stack]]
+name = "searxng"
+[stack.config]
+server = "vm/docker"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github"
+run_directory = "searxng"
+
+##
+
+[[stack]]
 name = "slskd"
 tags = ["internal", "media"]
 [stack.config]
