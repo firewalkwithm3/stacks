@@ -28,6 +28,7 @@ services:
     labels:
       caddy: auth.fern.garden
       caddy.reverse_proxy: "{{upstreams 9000}}"
+  
   authentik_db:
     image: docker.io/library/postgres:16-alpine
     container_name: authentik_db
@@ -50,6 +51,7 @@ services:
   authentik_ldap:
     image: ghcr.io/goauthentik/ldap:${AUTHENTIK_VERSION}
     container_name: authentik_ldap
+    restart: unless-stopped
     depends_on:
       authentik:
         condition: service_healthy
@@ -67,6 +69,7 @@ services:
   authentik_proxy:
     image: ghcr.io/goauthentik/proxy:${AUTHENTIK_VERSION}
     container_name: authentik_proxy
+    restart: unless-stopped
     depends_on:
       authentik:
         condition: service_healthy
@@ -89,7 +92,7 @@ services:
     networks:
       - default
     command: --save 60 1 --loglevel warning
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
       start_period: 20s
@@ -128,15 +131,3 @@ networks:
   default:
   proxy:
     external: true
-
-volumes:
-  authentik_db:
-    name: authentik_db
-  authentik_redis:
-    name: authentik_redis
-  authentik_media:
-    name: authentik_media
-  authentik_certs:
-    name: authentik_certs
-  authentik_templates:
-    name: authentik_templates
