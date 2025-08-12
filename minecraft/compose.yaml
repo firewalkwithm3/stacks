@@ -1,7 +1,7 @@
 name: minecraft
 services:
   crafty-controller:
-      container_name: crafty-contraller
+      container_name: crafty-controller
       image: registry.gitlab.com/crafty-controller/crafty-4:latest
       restart: always
       environment:
