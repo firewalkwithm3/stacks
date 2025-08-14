@@ -41,6 +41,19 @@ services:
       caddy.import: internal
       caddy.reverse_proxy: '{{ upstreams 11011 }}'
 
+  huntarr:
+    image: huntarr/huntarr:latest
+    container_name: huntarr
+    restart: unless-stopped
+    volumes:
+      - /home/fern//docker/data/arr/huntarr/config:/config
+    environment:
+      - TZ=Australia/Perth
+    labels:
+      caddy: huntarr.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 9705 }}'
+
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
