@@ -49,6 +49,10 @@ services:
       - /home/fern/docker/data/arr/huntarr/config:/config
     environment:
       - TZ=Australia/Perth
+    networks:
+      - default
+      - proxy
+      - media
     labels:
       caddy: huntarr.ferngarden.net
       caddy.import: internal
