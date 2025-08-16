@@ -13,6 +13,11 @@ services:
       - SMTP_FROM=ornithologist@ferngarden.net
       - SMTP_USERNAME=ornithologist@ferngarden.net
       - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SSO_ENABLED=true
+      - SSO_AUTHORITY=https://auth.fern.garden/application/o/vaultwarden/
+      - SSO_SCOPES="email profile offline_access"
+      - SSO_CLIENT_ID=${SSO_CLIENT_ID}
+      - SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
     networks:
       - default
       - proxy
