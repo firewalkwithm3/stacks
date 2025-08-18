@@ -6,7 +6,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./files:/etc/caddy
-      - /srv:/srv
+      - /home/fern/docker/data/caddy/srv:/srv
       - /home/fern/docker/data/caddy/data:/data
     environment:
       - CADDY_INGRESS_NETWORKS=proxy
