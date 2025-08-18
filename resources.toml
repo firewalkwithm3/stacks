@@ -122,6 +122,20 @@ run_directory = "calibre"
 ##
 
 [[stack]]
+name = "convertx"
+[stack.config]
+server = "vm/docker"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github"
+run_directory = "convertx"
+environment = """
+JWT_SECRET=[[CONVERTX_JWT_SECRET]]
+"""
+
+##
+
+[[stack]]
 name = "dozzle"
 tags = ["internal"]
 [stack.config]
@@ -438,6 +452,7 @@ links = [
 ]
 poll_for_updates = true
 auto_update = true
+auto_update_all_services = true
 linked_repo = "github"
 run_directory = "qbittorrent"
 environment = """
@@ -562,6 +577,8 @@ linked_repo = "github"
 run_directory = "vaultwarden"
 environment = """
 SMTP_PASSWORD=[[SMTP_PASSWORD]]
+SSO_CLIENT_ID=[[VAULTWARDEN_AUTHENTIK_CLIENT_ID]]
+SSO_CLIENT_SECRET=[[VAULTWARDEN_AUTHENTIK_CLIENT_SECRET]]
 """
 
 ##
