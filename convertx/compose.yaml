@@ -1,0 +1,22 @@
+name: convertx
+services:
+  convertx:
+    image: ghcr.io/c4illin/convertx
+    container_name: convertx
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - /home/fern/docker/data/convertx/data:/app/data
+    networks:
+     - default
+     - proxy
+    labels:
+      caddy: convertx.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: "{{ upstreams 3000 }}"
+
+networks:
+  default:
+  proxy:
+    external: true
