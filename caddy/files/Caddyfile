@@ -112,7 +112,8 @@ home.fern.garden {
 }
 
 # Nextcloud
-cloud.fern.garden {
+cloud.ferngarden.net {
+	import internal
 	reverse_proxy 10.0.1.107:80
 }
 
