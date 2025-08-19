@@ -54,6 +54,7 @@ transgender.pet {
 
 ## Proxmox ##
 
+# Proxmox VE
 spoonbill.ferngarden.net {
 	import internal
 	reverse_proxy 10.0.1.2:8006 {
@@ -72,6 +73,7 @@ egret.ferngarden.net {
 	}
 }
 
+# Proxmox Datacenter Manager
 pdm.ferngarden.net {
 	import internal
 	reverse_proxy 10.0.1.120:8443 {
@@ -81,6 +83,7 @@ pdm.ferngarden.net {
 	}
 }
 
+# Proxmox Backup Server
 pbs.ferngarden.net {
 	import internal
 	reverse_proxy 10.0.1.121:8007 {
@@ -92,19 +95,28 @@ pbs.ferngarden.net {
 
 ## VMs/Containers ##
 
+# Technitium DNS
 dns.ferngarden.net {
 	import internal
 	reverse_proxy 10.0.1.100:5380
 }
 
+# Firefox Sync Server
 fxsync.fern.garden {
 	reverse_proxy 10.0.1.104:5000
 }
 
+# Home Assistant
 home.fern.garden {
 	reverse_proxy 10.0.1.103:8123
 }
 
+# Nextcloud
+cloud.fern.garden {
+	reverse_proxy 10.0.1.107:80
+}
+
+# Crafty Controller
 crafty.ferngarden.net {
   import internal
 	reverse_proxy 10.0.1.101:8443 {
