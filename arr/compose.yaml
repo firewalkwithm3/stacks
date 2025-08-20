@@ -111,6 +111,7 @@ services:
   kapowarr:
     image: mrcas/kapowarr:latest
     container_name: kapowarr
+    restart: unless-stopped
     volumes:
       - /home/fern//docker/data/arr/kapowarr/database:/app/db
       - /media:/media
