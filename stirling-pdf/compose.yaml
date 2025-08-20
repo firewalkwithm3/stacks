@@ -3,6 +3,7 @@ services:
   stirling-pdf:
     image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
     container_name: stirling-pdf
+    restart: unless-stopped
     volumes:
       - /home/fern/docker/data/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
       - /home/fern/docker/data/stirling-pdf/extraConfigs:/configs
