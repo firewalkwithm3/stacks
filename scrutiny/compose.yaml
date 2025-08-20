@@ -3,6 +3,7 @@ services:
   scrutiny:
     image: ghcr.io/analogj/scrutiny:master-omnibus
     container_name: scrutiny
+    restart: unless-stopped
     volumes:
       - /run/udev:/run/udev:ro
       - /home/fern/docker/data/scrutiny/influxdb:/opt/scrutiny/influxdb
