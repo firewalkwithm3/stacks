@@ -110,7 +110,7 @@ CF_API_TOKEN=[[CLOUDFLARE_API_TOKEN]]
 ##
 
 [[stack]]
-name = "calibre-web-automated"
+name = "calibre"
 tags = ["media", "public"]
 [stack.config]
 server = "vm/docker"
@@ -377,15 +377,6 @@ ND_SYSTEM_PASSWORD=[[NAVIDROME_PASSWORD]]
 YOUTUBE_API_KEY=[[EXPLO_YOUTUBE_API_KEY]]
 SLSKD_API_KEY=[[EXPLO_SLSKD_API_KEY]]
 """
-
-##
-
-[[stack]]
-name = "nextcloud-aio"
-[stack.config]
-server = "vm/docker"
-linked_repo = "github"
-run_directory = "nextcloud-aio"
 
 ##
 
