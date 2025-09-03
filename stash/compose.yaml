@@ -1,7 +1,7 @@
 name: stash
 services:
   stash:
-    image: stashapp/stash:latest
+    image: ghcr.io/feederbox826/stash-s6:hwaccel
     container_name: stash
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -22,6 +22,10 @@ services:
       - default
       - proxy
     restart: unless-stopped
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    group_add:
+      - 992
     labels:
       caddy: stash.ferngarden.net
       caddy.1_import: internal
