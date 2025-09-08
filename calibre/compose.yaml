@@ -20,29 +20,29 @@ services:
       caddy: books.fern.garden
       caddy.reverse_proxy: '{{ upstreams 8083 }}'
 
-  # cwa-downloader:
-  #   image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
-  #   container_name: cwa-downloader
-  #   volumes:
-  #     - /media/media/calibre/ingest:/cwa-book-ingest
-  #   environment:
-  #     FLASK_PORT: 8084
-  #     LOG_LEVEL: info
-  #     BOOK_LANGUAGE: en
-  #     USE_BOOK_TITLE: true
-  #     TZ: Australia/Perth
-  #     APP_ENV: prod
-  #     UID: 1000
-  #     GID: 1800
-  #   networks:
-  #     - default
-  #     - media
-  #     - proxy
-  #   restart: unless-stopped
-  #   labels:
-  #     caddy: books-dl.ferngarden.net
-  #     caddy.import: internal
-  #     caddy.reverse_proxy: '{{ upstreams 8084 }}'
+  cwa-downloader:
+    image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+    container_name: cwa-downloader
+    volumes:
+      - /media/media/calibre/ingest:/cwa-book-ingest
+    environment:
+      FLASK_PORT: 8084
+      LOG_LEVEL: info
+      BOOK_LANGUAGE: en
+      USE_BOOK_TITLE: true
+      TZ: Australia/Perth
+      APP_ENV: prod
+      UID: 1000
+      GID: 1800
+    networks:
+      - default
+      - media
+      - proxy
+    restart: unless-stopped
+    labels:
+      caddy: books-dl.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{ upstreams 8084 }}'
 
 networks:
   default:
