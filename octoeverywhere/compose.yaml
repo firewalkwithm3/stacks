@@ -1,0 +1,9 @@
+services:
+  octoeverywhere:
+    image: octoeverywhere/octoeverywhere:latest
+    environment:
+        - COMPANION_MODE=klipper
+        - PRINTER_IP=10.0.1.4
+        - TZ=Australia/Perth
+    volumes:
+      - /home/fern/docker/data/octoeverywhere/data:/data
