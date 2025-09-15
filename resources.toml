@@ -32,6 +32,14 @@ enabled = true
 
 ##
 
+[[server]]
+name = "weebill"
+[server.config]
+address = "https://10.0.1.4:8120"
+enabled = true
+
+##
+
 [[stack]]
 name = "13ft"
 tags = ["internal"]
@@ -425,6 +433,17 @@ run_directory = "obsidian-livesync"
 environment = """
 COUCHDB_PASSWORD=[[OBSIDIAN_LIVESYNC_DB_PASSWORD]]
 """
+
+##
+
+[[stack]]
+name = "octoapp-plugin"
+[stack.config]
+server = "weebill"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github"
+run_directory = "octoapp-plugin"
 
 ##
 
