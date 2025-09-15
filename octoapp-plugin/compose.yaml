@@ -2,6 +2,7 @@ services:
   octoapp-plugin:
     image: bmerrill9/octoapp_plugin
     container_name: octoapp-plugin
+    network_mode: host
     environment:
         - COMPANION_MODE=klipper
         - PRINTER_IP=127.0.0.1
