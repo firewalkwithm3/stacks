@@ -200,7 +200,7 @@ services:
     labels:
       caddy: prowlarr.ferngarden.net
       caddy.import: internal
-      caddy.reverse_proxy: '{{upstreams 9696}}''
+      caddy.reverse_proxy: '{{upstreams 9696}}'
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
