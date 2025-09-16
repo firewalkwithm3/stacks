@@ -9,7 +9,8 @@ services:
       - /home/fern/docker/data/caddy/srv:/srv
       - /home/fern/docker/data/caddy/data:/data
     environment:
-      - CADDY_INGRESS_NETWORKS=proxy
+      - CADDY_INGRESS_NETWORKS=${CADDY_INGRESS_NETWORKS}
+      - CADDY_DOCKER_LABEL_PREFIX=${CADDY_DOCKER_LABEL_PREFIX}
       - CF_API_TOKEN=${CF_API_TOKEN}
       - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
       - CADDY_DOCKER_CADDYFILE_PATH=/etc/caddy/Caddyfile
