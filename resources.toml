@@ -8,6 +8,7 @@ enabled = true
 
 [[server]]
 name = "vm/matrix"
+tags = ["spoonbill"]
 [server.config]
 address = "https://10.0.1.106:8120"
 enabled = true
