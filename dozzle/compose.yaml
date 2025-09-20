@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       DOZZLE_AUTH_PROVIDER: forward-proxy
-      DOZZLE_REMOTE_HOST: tcp://docker_socket_proxy:2375|docker,tcp://10.0.1.101:2375|minecraft,tcp://10.0.1.105:2375|musicbrainz,tcp://10.0.1.106:2375|matrix
+      DOZZLE_REMOTE_HOST: tcp://docker_socket_proxy:2375|docker,tcp://10.0.1.101:2375|minecraft,tcp://10.0.1.105:2375|musicbrainz,tcp://10.0.1.106:2375|matrix,tcp://10.0.1.4:2375|weebill
     networks:
       - default
       - metrics
