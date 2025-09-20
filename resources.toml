@@ -352,6 +352,15 @@ run_directory = "metrics"
 ##
 
 [[stack]]
+name = "metrics_weebill"
+[stack.config]
+server = "weebill"
+linked_repo = "github"
+run_directory = "metrics"
+
+##
+
+[[stack]]
 name = "minecraft"
 tags = ["public"]
 [stack.config]
@@ -639,25 +648,10 @@ image_registry = [
 
 ##
 
-[[build]]
-name = "readarr"
-[build.config]
-builder = "docker.local"
-version = "0.4.18"
-auto_increment_version = false
-git_account = "firewalkwithm3"
-repo = "linuxserver/docker-readarr"
-branch = "develop"
-commit = "develop-0.4.18.2805-ls157"
-image_registry = [
-  { domain = "ghcr.io", account = "firewalkwithm3" }
-]
-
-##
-
 [[repo]]
 name = "github"
 [repo.config]
+server = "docker"
 builder = "docker.local"
 git_account = "firewalkwithm3"
 repo = "firewalkwithm3/stacks"
@@ -668,7 +662,7 @@ repo = "firewalkwithm3/stacks"
 name = "docker.local"
 [builder.config]
 type = "Server"
-params = {}
+params.server_id = "docker"
 
 ##
 
