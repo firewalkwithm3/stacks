@@ -1,5 +1,5 @@
 [[server]]
-name = "vm/docker"
+name = "docker"
 tags = ["spoonbill"]
 [server.config]
 enabled = true
@@ -7,7 +7,7 @@ enabled = true
 ##
 
 [[server]]
-name = "vm/matrix"
+name = "matrix"
 tags = ["spoonbill"]
 [server.config]
 address = "https://10.0.1.106:8120"
@@ -16,7 +16,7 @@ enabled = true
 ##
 
 [[server]]
-name = "vm/minecraft"
+name = "minecraft"
 tags = ["spoonbill"]
 [server.config]
 address = "https://10.0.1.101:8120"
@@ -25,7 +25,7 @@ enabled = true
 ##
 
 [[server]]
-name = "vm/musicbrainz"
+name = "musicbrainz"
 tags = ["spoonbill"]
 [server.config]
 address = "https://10.0.1.105:8120"
@@ -45,7 +45,7 @@ enabled = true
 name = "13ft"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -57,7 +57,7 @@ run_directory = "13ft"
 name = "arr"
 tags = ["internal", "media"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://bazarr.ferngarden.net/",
   "https://jackett.ferngarden.net/",
@@ -79,7 +79,7 @@ QBITTORRENT_PASSWORD=[[QBITTORRENT_PASSWORD]]
 name = "audiobookshelf"
 tags = ["media", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://audiobookshelf.fern.garden"
 ]
@@ -93,7 +93,7 @@ run_directory = "audiobookshelf"
 name = "authentik"
 tags = ["reverse-proxy", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://auth.fern.garden"]
 poll_for_updates = true
 auto_update = true
@@ -114,7 +114,7 @@ AUTHENTIK_VERSION=2025.6
 name = "caddy"
 tags = ["reverse-proxy", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -129,7 +129,7 @@ CF_API_TOKEN=[[CLOUDFLARE_API_TOKEN]]
 name = "calibre"
 tags = ["media", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://books.fern.garden"]
 auto_update = true
 linked_repo = "github"
@@ -140,7 +140,7 @@ run_directory = "calibre"
 [[stack]]
 name = "convertx"
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -155,7 +155,7 @@ JWT_SECRET=[[CONVERTX_JWT_SECRET]]
 name = "dozzle"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -167,7 +167,7 @@ run_directory = "dozzle"
 name = "forgejo"
 tags = ["public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://git.fern.garden"]
 auto_update = true
 linked_repo = "github"
@@ -182,7 +182,7 @@ POSTGRES_PASSWORD=[[FORGEJO_DB_PASSWORD]]
 name = "grocy"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://grocy.ferngarden.net"]
 auto_update = true
 linked_repo = "github"
@@ -194,7 +194,7 @@ run_directory = "grocy"
 name = "homebox"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://homebox.ferngarden.net"
 ]
@@ -208,7 +208,7 @@ run_directory = "homebox"
 name = "homepage"
 tags = ["internal", "metrics"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -220,7 +220,7 @@ run_directory = "homepage"
 name = "immich"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://photos.ferngarden.net"
 ]
@@ -238,7 +238,7 @@ DB_PASSWORD=[[IMMICH_DB_PASSWORD]]
 name = "it-tools"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -250,7 +250,7 @@ run_directory = "it-tools"
 name = "jellyfin"
 tags = ["media", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://jellyfin.fern.garden",
   "https://jellystat.ferngarden.net"
@@ -271,7 +271,7 @@ JELLYSTAT_PASSWORD=[[JELLYSTAT_PASSWORD]]
 name = "komga"
 tags = ["media", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https:/comics.fern.garden"]
 poll_for_updates = true
 auto_update = true
@@ -284,7 +284,7 @@ run_directory = "komga"
 name = "linkwarden"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 auto_update = true
 linked_repo = "github"
 run_directory = "linkwarden"
@@ -302,7 +302,7 @@ AUTHENTIK_CLIENT_SECRET=[[LINKWARDEN_AUTHENTIK_CLIENT_SECRET]]
 name = "mailserver"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -314,7 +314,7 @@ run_directory = "mailserver"
 name = "metrics_vm_docker"
 tags = ["internal", "metrics"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 linked_repo = "github"
 run_directory = "metrics"
 
@@ -323,7 +323,7 @@ run_directory = "metrics"
 [[stack]]
 name = "metrics_vm_matrix"
 [stack.config]
-server = "vm/matrix"
+server = "matrix"
 linked_repo = "github"
 run_directory = "metrics"
 
@@ -333,7 +333,7 @@ run_directory = "metrics"
 name = "metrics_vm_minecraft"
 tags = ["internal", "metrics"]
 [stack.config]
-server = "vm/minecraft"
+server = "minecraft"
 linked_repo = "github"
 run_directory = "metrics"
 
@@ -343,7 +343,7 @@ run_directory = "metrics"
 name = "metrics_vm_musicbrainz"
 tags = ["metrics", "internal"]
 [stack.config]
-server = "vm/musicbrainz"
+server = "musicbrainz"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -355,7 +355,7 @@ run_directory = "metrics"
 name = "minecraft"
 tags = ["public"]
 [stack.config]
-server = "vm/minecraft"
+server = "minecraft"
 auto_update = true
 linked_repo = "github"
 reclone = true
@@ -370,7 +370,7 @@ RCON_PASSWORD=[[MINECRAFT_RCON_PASSWORD]]
 name = "miniflux"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://rss.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
@@ -389,7 +389,7 @@ OAUTH2_CLIENT_SECRET=[[MINIFLUX_OIDC_CLIENT_SECRET]]
 name = "navidrome"
 tags = ["media", "public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://music.fern.garden"]
 poll_for_updates = true
 auto_update = true
@@ -409,7 +409,7 @@ SLSKD_API_KEY=[[EXPLO_SLSKD_API_KEY]]
 name = "notifications"
 tags = ["public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://ntfy.fern.garden",
   "https://mollysocket.fern.garden"
@@ -428,7 +428,7 @@ MOLLY_VAPID_PRIVKEY=[[MOLLY_VAPID_PRIVKEY]]
 name = "obsidian-livesync"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 linked_repo = "github"
 run_directory = "obsidian-livesync"
 environment = """
@@ -452,7 +452,7 @@ run_directory = "octoapp-plugin"
 name = "paperless"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://paperless.ferngarden.net"
 ]
@@ -473,7 +473,7 @@ AUTHENTIK_CLIENT_SECRET=[[PAPERLESS_OIDC_CLIENT_SECRET]]
 name = "qbittorrent"
 tags = ["internal", "media"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://qbittorrent.ferngarden.net"
 ]
@@ -497,7 +497,7 @@ RED_KEY=[[RED_KEY]]
 name = "romm"
 tags = ["public", "media"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://games.fern.garden"]
 poll_for_updates = true
 auto_update = true
@@ -521,7 +521,7 @@ OIDC_CLIENT_SECRET=[[ROMM_OIDC_CLIENT_SECRET]]
 name = "scrutiny"
 tags = ["internal", "metrics"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 auto_update = true
 linked_repo = "github"
 run_directory = "scrutiny"
@@ -531,7 +531,7 @@ run_directory = "scrutiny"
 [[stack]]
 name = "searxng"
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -543,7 +543,7 @@ run_directory = "searxng"
 name = "slskd"
 tags = ["internal", "media"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -559,7 +559,7 @@ SLSKD_SLSK_PASSWORD=[[SOULSEEK_PASSWORD]]
 name = "stash"
 tags = ["internal", "media"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://stash.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
@@ -572,7 +572,7 @@ run_directory = "stash"
 name = "stirling-pdf"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -584,7 +584,7 @@ run_directory = "stirling-pdf"
 name = "synapse"
 tags = ["public"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "github"
@@ -596,7 +596,7 @@ run_directory = "synapse"
 name = "vaultwarden"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = ["https://vault.ferngarden.net"]
 poll_for_updates = true
 auto_update = true
@@ -614,7 +614,7 @@ SSO_CLIENT_SECRET=[[VAULTWARDEN_AUTHENTIK_CLIENT_SECRET]]
 name = "wallos"
 tags = ["internal"]
 [stack.config]
-server = "vm/docker"
+server = "docker"
 links = [
   "https://wallos.ferngarden.net"
 ]
