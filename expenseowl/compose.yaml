@@ -1,0 +1,20 @@
+name: expenseowl
+services:
+  expenseowl:
+    image: tanq16/expenseowl:main
+    container_name: expenseowl
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    volumes:
+      - /home/fern/docker/data/expenseowl/data:/app/data
+    labels:
+      caddy: expenseowl.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{upstreams 8080}}'
+
+networks:
+  default:
+  proxy:
+    external: true
