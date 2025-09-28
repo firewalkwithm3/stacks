@@ -14,7 +14,7 @@
 }
 
 (authentik) {
-        reverse_proxy authentik_proxy:9000
+  reverse_proxy authentik_proxy:9000
 }
 
 ## Root Hosts ##
