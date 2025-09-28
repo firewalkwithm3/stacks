@@ -38,7 +38,8 @@ services:
     restart: unless-stopped
     labels:
       caddy: cleanuparr.ferngarden.net
-      caddy.import: '{{upstreams 11011}}'
+      caddy.import: internal
+      caddy.reverse_proxy: '{{upstreams 11011}}'
       
 
   # huntarr:
