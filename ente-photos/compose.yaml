@@ -1,7 +1,7 @@
 services:
-  ente_museum:
+  ente-museum:
     image: ghcr.io/ente-io/server
-    container_name: ente_museum
+    container_name: ente-museum
     networks: 
       - default
       - proxy
@@ -22,16 +22,16 @@ services:
       caddy.import: internal
       caddy.reverse_proxy: '{{upstreams 8080}}'
 
-  ente_socat:
+  ente-socat:
     image: alpine/socat
-    container_name: ente_socat
-    network_mode: service:ente_museum
-    depends_on: [ente_museum]
+    container_name: ente-socat
+    network_mode: service:ente-museum
+    depends_on: [ente-museum]
     command: "TCP-LISTEN:3200,fork,reuseaddr TCP:ente-minio:3200"
 
-  ente_web:
+  ente-web:
     image: ghcr.io/ente-io/web
-    container_name: ente_web
+    container_name: ente-web
     networks:
       - default
       - proxy
@@ -46,9 +46,9 @@ services:
       caddy_2.import: internal
       caddy_2.reverse_proxy: '{{upstreams 3002}}'
 
-  ente_db:
+  ente-db:
     image: postgres:15
-    container_name: ente_db
+    container_name: ente-db
     environment:
       POSTGRES_USER: ente
       POSTGRES_PASSWORD: ${ENTE_DB_PASSWORD}
