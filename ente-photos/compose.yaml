@@ -1,0 +1,97 @@
+services:
+  museum:
+    image: ghcr.io/ente-io/server
+    container_name: ente_museum
+    networks: 
+      - default
+      - proxy
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - /home/fern/docker/data/ente-photos/config/museum.yaml:/museum.yaml:ro
+      - /home/fern/docker/data/ente-photos/data:/data:ro
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/ping"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      caddy: ente-api.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{upstreams 8080}}'
+
+  socat:
+    image: alpine/socat
+    container_name: ente_socat
+    network_mode: service:ente_museum
+    depends_on: [ente_museum]
+    command: "TCP-LISTEN:3200,fork,reuseaddr TCP:ente_minio:3200"
+
+  web:
+    image: ghcr.io/ente-io/web
+    container_name: ente_web
+    networks:
+      - default
+      - proxy
+    environment:
+      ENTE_API_ORIGIN: https://ente-api.ferngarden.net
+      ENTE_ALBUMS_ORIGIN: https://ente-albums.ferngarden.net
+    labels:
+      caddy_1: ente.ferngarden.net
+      caddy_1.import: internal
+      caddy_1.reverse_proxy: '{{upstreams 3000}}'
+      caddy_2: ente-albums.ferngarden.net
+      caddy_2.import: internal
+      caddy_2.reverse_proxy: '{{upstreams 3002}}'
+
+  ente_db:
+    image: postgres:15
+    container_name: ente_db
+    environment:
+      POSTGRES_USER: ente
+      POSTGRES_PASSWORD: ${ENTE_DB_PASSWORD}
+      POSTGRES_DB: ente
+    networks:
+      - default
+    healthcheck:
+      test: pg_isready -q -d ente -U pguser
+      start_period: 40s
+      start_interval: 1s
+    volumes:
+      - /home/fern/docker/data/ente-photos/db:/var/lib/postgresql/data
+
+  ente_minio:
+    image: minio/minio
+    container_name: ente_minio
+    networks:
+      - default
+    environment:
+      MINIO_ROOT_USER: ente
+      MINIO_ROOT_PASSWORD: ${ENTE_MINIO_ROOT_PASSWORD}
+    command: server /data --address ":3200" --console-address ":3201"
+    volumes:
+      - /home/fern/docker/data/ente-photos/storage:/data
+    post_start:
+      - command: |
+          sh -c '
+          #!/bin/sh
+
+          while ! mc alias set h0 http://minio:3200 ente "${ENTE_MINIO_ROOT_PASSWORD}" 2>/dev/null
+          do
+            echo "Waiting for minio..."
+            sleep 0.5
+          done
+
+          cd /data
+
+          mc mb -p b2-eu-cen
+          mc mb -p wasabi-eu-central-2-v3
+          mc mb -p scw-eu-fr-v3
+          '
+
+networks:
+  default:
+  proxy:
+    external: true
