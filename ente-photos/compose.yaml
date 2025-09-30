@@ -12,13 +12,13 @@ services:
       - /home/fern/docker/data/ente-photos/config/museum.yaml:/museum.yaml:ro
       - /home/fern/docker/data/ente-photos/data:/data:ro
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://ente_museum:8080/ping"]
+      test: ["CMD", "curl", "--fail", "https://api.ente.fern.garden/ping"]
       interval: 60s
       timeout: 5s
       retries: 3
       start_period: 5s
     labels:
-      caddy: ente-api.ferngarden.net
+      caddy: api.ente.fern.garden
       caddy.import: internal
       caddy.reverse_proxy: '{{upstreams 8080}}'
 
@@ -36,13 +36,13 @@ services:
       - default
       - proxy
     environment:
-      ENTE_API_ORIGIN: https://ente-api.ferngarden.net
-      ENTE_ALBUMS_ORIGIN: https://ente-albums.ferngarden.net
+      ENTE_API_ORIGIN: https://api.ente.fern.garden
+      ENTE_ALBUMS_ORIGIN: https://albums.ente.fern.garden
     labels:
-      caddy_1: ente.ferngarden.net
+      caddy_1: ente.fern.garden
       caddy_1.import: internal
       caddy_1.reverse_proxy: '{{upstreams 3000}}'
-      caddy_2: ente-albums.ferngarden.net
+      caddy_2: albums.ente.fern.garden
       caddy_2.import: internal
       caddy_2.reverse_proxy: '{{upstreams 3002}}'
 
