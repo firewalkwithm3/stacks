@@ -19,7 +19,6 @@ services:
       start_period: 5s
     labels:
       caddy: api.ente.fern.garden
-      caddy.import: internal
       caddy.reverse_proxy: '{{upstreams 8080}}'
 
   ente-socat:
@@ -40,10 +39,8 @@ services:
       ENTE_ALBUMS_ORIGIN: https://albums.ente.fern.garden
     labels:
       caddy_1: ente.fern.garden
-      caddy_1.import: internal
       caddy_1.reverse_proxy: '{{upstreams 3000}}'
       caddy_2: albums.ente.fern.garden
-      caddy_2.import: internal
       caddy_2.reverse_proxy: '{{upstreams 3002}}'
 
   ente-db:
@@ -67,12 +64,16 @@ services:
     container_name: ente-minio
     networks:
       - default
+      - proxy
     environment:
       MINIO_ROOT_USER: ente
       MINIO_ROOT_PASSWORD: ${ENTE_MINIO_ROOT_PASSWORD}
     command: server /data --address ":3200" --console-address ":3201"
     volumes:
       - /home/fern/docker/data/ente-photos/storage:/data
+    labels:
+      caddy: s3.ente.fern.garden
+      caddy.reverse_proxy: '{{upstreams 3200}}'
     post_start:
       - command: |
           sh -c '
