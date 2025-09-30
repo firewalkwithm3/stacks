@@ -1,5 +1,5 @@
 services:
-  museum:
+  ente_museum:
     image: ghcr.io/ente-io/server
     container_name: ente_museum
     networks: 
