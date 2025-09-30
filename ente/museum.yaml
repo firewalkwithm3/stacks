@@ -11,43 +11,9 @@
 db:
     host: postgres
     port: 5432
-    name: ente_db
-    user: pguser
-    password: <password>
-
-# This section is for configuring storage buckets. Omit this section if
-# you only intend to use Ente Auth
-s3:
-    # Change this to false if enabling SSL
-    are_local_buckets: true
-    # Only path-style URL works if disabling are_local_buckets with MinIO
-    use_path_style_urls: true
-    b2-eu-cen:
-      # Uncomment the below configuration to override the top-level configuration 
-      # are_local_buckets: true
-      # use_path_style_urls: true
-      key: <key>
-      secret: <secret>
-      endpoint: localhost:3200
-      region: eu-central-2
-      bucket: b2-eu-cen
-    wasabi-eu-central-2-v3:
-      # are_local_buckets: true
-      # use_path_style_urls: true
-      key: <key>
-      secret: <secret>
-      endpoint: localhost:3200
-      region: eu-central-2
-      bucket: wasabi-eu-central-2-v3
-      compliance: false
-    scw-eu-fr-v3:
-      # are_local_buckets: true
-      # use_path_style_urls: true
-      key: <key>
-      secret: <secret>
-      endpoint: localhost:3200
-      region: eu-central-2
-      bucket: scw-eu-fr-v3
+    name: ente
+    user: ente
+    password: [[ENTE_DB_PASSWORD]]
 
 # Specify the base endpoints for various web apps
 apps:
