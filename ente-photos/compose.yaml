@@ -91,6 +91,18 @@ services:
           mc mb -p scw-eu-fr-v3
           '
 
+  ente_cli:
+    image: ghcr.io/firewalkwithm3/ente-cli
+    container_name: ente_cli
+    command: /bin/sh
+    networks:
+      - default
+    volumes:
+      - /home/fern/docker/data/ente-photos/cli:/cli-data:rw
+      - /home/fern/docker/data/ente-photos/export:/data:rw
+    stdin_open: true
+    tty: true
+
 networks:
   default:
   proxy:
