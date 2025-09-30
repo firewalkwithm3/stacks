@@ -56,7 +56,7 @@ services:
     networks:
       - default
     healthcheck:
-      test: pg_isready -q -d ente -U pguser
+      test: pg_isready -q -d ente -U ente
       start_period: 40s
       start_interval: 1s
     volumes:
