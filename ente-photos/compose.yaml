@@ -6,7 +6,7 @@ services:
       - default
       - proxy
     depends_on:
-      postgres:
+      ente_db:
         condition: service_healthy
     volumes:
       - /home/fern/docker/data/ente-photos/config/museum.yaml:/museum.yaml:ro
