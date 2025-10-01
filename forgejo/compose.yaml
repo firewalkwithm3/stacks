@@ -12,8 +12,9 @@ services:
     networks:
       - default
     restart: unless-stopped
+  
   server:
-    image: codeberg.org/forgejo/forgejo:11
+    image: codeberg.org/forgejo/forgejo:12
     container_name: forgejo
     depends_on:
       - forgejo_db
