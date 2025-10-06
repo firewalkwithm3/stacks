@@ -119,6 +119,9 @@ poll_for_updates = true
 auto_update = true
 linked_repo = "github"
 run_directory = "caddy"
+config_files = [
+  { path = "files/Caddyfile", services = ["caddy"] }
+]
 environment = """
 CF_API_TOKEN=[[CLOUDFLARE_API_TOKEN]]
 """
@@ -139,6 +142,7 @@ run_directory = "calibre"
 
 [[stack]]
 name = "convertx"
+tags = ["internal"]
 [stack.config]
 server = "docker"
 poll_for_updates = true
@@ -160,6 +164,21 @@ poll_for_updates = true
 auto_update = true
 linked_repo = "github"
 run_directory = "dozzle"
+
+##
+
+[[stack]]
+name = "ente-photos"
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github"
+run_directory = "ente-photos"
+environment = """
+ENTE_DB_PASSWORD=[[ENTE_DB_PASSWORD]]
+ENTE_MINIO_ROOT_PASSWORD=[[ENTE_MINIO_ROOT_PASSWORD]]
+"""
 
 ##
 
@@ -322,6 +341,7 @@ run_directory = "metrics"
 
 [[stack]]
 name = "metrics_vm_matrix"
+tags = ["internal", "metrics"]
 [stack.config]
 server = "matrix"
 linked_repo = "github"
@@ -353,6 +373,7 @@ run_directory = "metrics"
 
 [[stack]]
 name = "metrics_weebill"
+tags = ["internal", "metrics"]
 [stack.config]
 server = "weebill"
 linked_repo = "github"
@@ -448,6 +469,7 @@ COUCHDB_PASSWORD=[[OBSIDIAN_LIVESYNC_DB_PASSWORD]]
 
 [[stack]]
 name = "octoapp-plugin"
+tags = ["internal"]
 [stack.config]
 server = "weebill"
 poll_for_updates = true
@@ -489,6 +511,7 @@ links = [
 poll_for_updates = true
 auto_update = true
 auto_update_all_services = true
+destroy_before_deploy = true
 linked_repo = "github"
 run_directory = "qbittorrent"
 environment = """
@@ -539,6 +562,7 @@ run_directory = "scrutiny"
 
 [[stack]]
 name = "searxng"
+tags = ["internal"]
 [stack.config]
 server = "docker"
 poll_for_updates = true
@@ -642,6 +666,18 @@ version = "2.10.0"
 auto_increment_version = false
 linked_repo = "github"
 build_path = "caddy"
+image_registry = [
+  { domain = "ghcr.io", account = "firewalkwithm3" }
+]
+
+##
+
+[[build]]
+name = "ente-cli"
+[build.config]
+builder = "docker.local"
+repo = "ente-io/ente"
+build_path = "cli"
 image_registry = [
   { domain = "ghcr.io", account = "firewalkwithm3" }
 ]
