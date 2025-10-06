@@ -2,6 +2,7 @@ services:
   ente-museum:
     image: ghcr.io/ente-io/server
     container_name: ente-museum
+    restart: unless-stopped
     networks: 
       - default
       - proxy
@@ -24,6 +25,7 @@ services:
   ente-socat:
     image: alpine/socat
     container_name: ente-socat
+    restart: unless-stopped
     network_mode: service:ente-museum
     depends_on: [ente-museum]
     command: "TCP-LISTEN:3200,fork,reuseaddr TCP:ente-minio:3200"
@@ -31,6 +33,7 @@ services:
   ente-web:
     image: ghcr.io/ente-io/web
     container_name: ente-web
+    restart: unless-stopped
     networks:
       - default
       - proxy
@@ -46,6 +49,7 @@ services:
   ente-db:
     image: postgres:15
     container_name: ente-db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ente
       POSTGRES_PASSWORD: ${ENTE_DB_PASSWORD}
@@ -62,6 +66,7 @@ services:
   ente-minio:
     image: minio/minio
     container_name: ente-minio
+    restart: unless-stopped
     networks:
       - default
       - proxy
