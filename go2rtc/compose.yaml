@@ -8,6 +8,7 @@ services:
     ports:
       - 1984:1984
       - 8554:8554
+      - 8555:8555/tcp
       - 8555:8555/udp
     restart: unless-stopped
     environment:
