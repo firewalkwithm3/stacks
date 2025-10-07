@@ -3,10 +3,18 @@ services:
   go2rtc:
     image: alexxit/go2rtc
     container_name: go2rtc
-    network_mode: host
+    networks:
+      - default
+    ports:
+      - 1984:1984
     restart: unless-stopped
     environment:
       - TZ=Australia/Perth
     volumes:
       - /home/fern/docker/data/go2rtc/config:/config
+    devices:
+      - /dev/dri:/dev/dri
+
+networks:
+  default:
 
