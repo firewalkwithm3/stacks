@@ -1,7 +1,7 @@
 name: go2rtc
 services:
   go2rtc:
-    image: alexxit/go2rtc
+    image: alexxit/go2rtc:latest-hardware
     container_name: go2rtc
     networks:
       - default
