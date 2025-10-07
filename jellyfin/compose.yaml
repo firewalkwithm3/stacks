@@ -1,7 +1,7 @@
 name: jellyfin
 services:
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:${JELLYFIN_VERSION}
     container_name: jellyfin
     volumes:
       - /home/fern/docker/data/jellyfin/cache:/var/cache/jellyfin
