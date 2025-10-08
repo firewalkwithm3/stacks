@@ -1,0 +1,7 @@
+name: mediamtx
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    container_name: mediamtx
+    network_mode: host
+    restart: unless-stopped
