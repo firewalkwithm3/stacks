@@ -5,3 +5,7 @@ services:
     container_name: mediamtx
     network_mode: host
     restart: unless-stopped
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    group_add:
+      - 992
