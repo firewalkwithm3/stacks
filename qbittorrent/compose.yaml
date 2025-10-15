@@ -58,7 +58,7 @@ services:
       - PUID=1000
       - PGID=1800
       - WEBUI_PORT=8080
-      - VPN_INPUT_PORTS=8080
+      - VPN_OUTPUT_PORTS=8080
       - UMASK=000
       - DEBUG=false
     networks:
