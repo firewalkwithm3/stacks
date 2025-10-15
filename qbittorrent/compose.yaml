@@ -38,6 +38,7 @@ services:
     container_name: qbittorrent
     volumes:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/config
+      - /home/fern/docker/data/qbittorrent/qbittorrent/data:/data
       - /media:/media
       - /etc/localtime:/etc/localtime:ro
     cap_add:
