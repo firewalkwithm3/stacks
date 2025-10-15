@@ -59,6 +59,10 @@ services:
     networks:
       - default
     restart: unless-stopped
+    labels:
+      caddy: qbittorrent.ferngarden.net
+      caddy.import: internal
+      caddy.reverse_proxy: '{{upstreams 8080}}'
 
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
