@@ -8,7 +8,9 @@ services:
     volumes:
       - /home/fern/docker/data/qbittorrent/cross-seed/config:/config
       - /media:/media
-    network_mode: service:qbittorrent
+    networks:
+      - default
+      - media
     command: daemon
     restart: unless-stopped
     user: 1000:1800
@@ -17,7 +19,9 @@ services:
     image: ghcr.io/moleculekayak/fertilizer:latest
     container_name: fertilizer
     restart: unless-stopped
-    network_mode: container:qbittorrent
+    networks:
+      - default
+      - media
     depends_on:
       - qbittorrent
     volumes:
