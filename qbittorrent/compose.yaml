@@ -47,6 +47,7 @@ services:
       - VPN_ENABLED=yes
       - VPN_PROV=protonvpn
       - VPN_CLIENT=wireguard
+      - VPN_USER=${PROTON_USER}
       - STRICT_PORT_FORWARD=yes
       - NAME_SERVERS=9.9.9.9
       - LAN_NETWORK=192.168.1.0/24
