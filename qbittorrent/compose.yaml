@@ -4,7 +4,8 @@ services:
     image: ghcr.io/cross-seed/cross-seed:6
     container_name: cross-seed
     depends_on:
-      - qbittorrent
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/cross-seed/config:/config
       - /media:/media
@@ -21,9 +22,9 @@ services:
     restart: unless-stopped
     networks:
       - default
-      - media
     depends_on:
-      - qbittorrent
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/torrents:ro
       - /media:/media
@@ -32,35 +33,46 @@ services:
       - RED_KEY=${RED_KEY}
       - INJECT_TORRENTS=true
       - INJECTION_LINK_DIRECTORY=/media/downloads/fertilizer/linked-data
-      - QBITTORRENT_URL=http://fern:${QBITTORRENT_PASS}@qbittorrent:8080
+      - QBITTORRENT_URL=http://fern:${QBITTORRENT_PASS}@qbittorrent_gluetun:8080
     command: fertilizer -o /media/downloads/fertilizer/torrent-files -i /torrents/qBittorrent/BT_backup --server
     user: 1000:1800
   
   qbittorrent:
-    image: binhex/arch-qbittorrentvpn
+    image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
+    depends_on:
+      qbittorrent_gluetun:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/config
-      - /home/fern/docker/data/qbittorrent/qbittorrent/data:/data
       - /media:/media
-      - /etc/localtime:/etc/localtime:ro
-    cap_add:
-      - NET_ADMIN
     environment:
-      - VPN_ENABLED=yes
-      - VPN_PROV=protonvpn
-      - VPN_CLIENT=openvpn
-      - VPN_USER=${PROTON_USER}+pmp
-      - VPN_PASS=${PROTON_PASS}
-      - STRICT_PORT_FORWARD=yes
-      - NAME_SERVERS=9.9.9.9
-      - LAN_NETWORK=10.0.1.0/24
-      - ENABLE_PRIVOXY=yes
+      - WEBUI_PORT=8080
       - PUID=1000
       - PGID=1800
-      - WEBUI_PORT=8080
-      - UMASK=000
-      - DEBUG=false
+      - TZ=Australia/Perth
+    network_mode: service:qbittorrent_gluetun
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf https://api.ipify.org || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  qbittorrent_gluetun:
+    image: qmcgaw/gluetun
+    container_name: qbittorrent_gluetun
+    volumes:
+      - /home/fern/docker/data/qbittorrent/gluetun/auth:/gluetun/auth
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - VPN_PORT_FORWARDING=on
+      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
+      - SERVER_COUNTRIES=Australia
+      - WIREGUARD_ADDRESSES=10.2.0.2/32
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - BLOCK_MALICIOUS=off
     networks:
       - default
       - proxy
@@ -70,18 +82,46 @@ services:
       caddy: qbittorrent.ferngarden.net
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+  qbittorrent_qsticky:
+    image: ghcr.io/monstermuffin/qsticky:latest
+    container_name: qbittorrent_qsticky
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    environment:
+      - QBITTORRENT_HOST=qbittorrent_gluetun
+      - QBITTORRENT_HTTPS=false
+      - QBITTORRENT_PORT=8080
+      - QBITTORRENT_USER=fern
+      - QBITTORRENT_PASS=${QBITTORRENT_PASS}
+      - GLUETUN_HOST=qbittorrent_gluetun
+      - GLUETUN_AUTH_TYPE=apikey
+      - GLUETUN_APIKEY=${GLUETUN_APIKEY}
+      - LOG_LEVEL=INFO
+    networks:
+      - default
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import json; exit(0 if json.load(open('/app/health/status.json'))['healthy'] else 1)" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
     container_name: qbittorrent_mamapi
     restart: unless-stopped
     depends_on:
-      - qbittorrent
+      qbittorrent:
+        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/mamapi/data:/data
-    networks:
-      - default
-      - media
+    network_mode: service:qbittorrent_gluetun
     environment:
       TZ: Australia/Perth
       MAM_ID: ${MAM_ID}
