@@ -19,8 +19,7 @@ services:
     image: ghcr.io/moleculekayak/fertilizer:latest
     container_name: fertilizer
     restart: unless-stopped
-    networks:
-      - default
+    network_mode: container:qbittorrent
     depends_on:
       - qbittorrent
     volumes:
