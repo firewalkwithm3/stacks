@@ -62,6 +62,7 @@ services:
     networks:
       - default
       - proxy
+      - media
     restart: unless-stopped
     labels:
       caddy: qbittorrent.ferngarden.net
@@ -78,6 +79,7 @@ services:
       - /home/fern/docker/data/qbittorrent/mamapi/data:/data
     networks:
       - default
+      - media
     environment:
       TZ: Australia/Perth
       MAM_ID: ${MAM_ID}
