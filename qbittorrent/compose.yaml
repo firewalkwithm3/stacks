@@ -36,79 +36,31 @@ services:
     user: 1000:1800
   
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: binhex/arch-qbittorrentvpn
     container_name: qbittorrent
-    depends_on:
-      qbittorrent_gluetun:
-        condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/config
       - /media:/media
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    sysctls:
+     - net.ipv4.conf.all.src_valid_mark=1
     environment:
-      - WEBUI_PORT=8080
+      - VPN_ENABLED=yes
+      - VPN_PROV=protonvpn
+      - VPN_CLIENT=openvpn
+      - STRICT_PORT_FORWARD=yes
+      - NAME_SERVERS=9.9.9.9
+      - LAN_NETWORK=192.168.1.0/24
+      - ENABLE_PRIVOXY=yes
       - PUID=1000
       - PGID=1800
-      - TZ=Australia/Perth
-    network_mode: service:qbittorrent_gluetun
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -sf https://api.ipify.org || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  qbittorrent_gluetun:
-    image: qmcgaw/gluetun
-    container_name: qbittorrent_gluetun
-    volumes:
-      - /home/fern/docker/data/qbittorrent/gluetun/auth:/gluetun/auth
-    environment:
-      - VPN_SERVICE_PROVIDER=protonvpn
-      - VPN_TYPE=wireguard
-      - VPN_PORT_FORWARDING=on
-      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
-      - SERVER_COUNTRIES=Australia
-      - WIREGUARD_ADDRESSES=10.2.0.2/32
-      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
-      - BLOCK_MALICIOUS=off
-    networks:
-      - default
-      - proxy
-      - media
-    restart: unless-stopped
-    labels:
-      caddy: qbittorrent.ferngarden.net
-      caddy.import: internal
-      caddy.reverse_proxy: "{{upstreams 8080}}"
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-
-  qbittorrent_qsticky:
-    image: ghcr.io/monstermuffin/qsticky:latest
-    container_name: qbittorrent_qsticky
-    depends_on:
-      qbittorrent:
-        condition: service_healthy
-    environment:
-      - QBITTORRENT_HOST=qbittorrent_gluetun
-      - QBITTORRENT_HTTPS=false
-      - QBITTORRENT_PORT=8080
-      - QBITTORRENT_USER=fern
-      - QBITTORRENT_PASS=${QBITTORRENT_PASS}
-      - GLUETUN_HOST=qbittorrent_gluetun
-      - GLUETUN_AUTH_TYPE=apikey
-      - GLUETUN_APIKEY=${GLUETUN_APIKEY}
-      - LOG_LEVEL=INFO
+      - WEBUI_PORT=8080
+      - UMASK=000
+      - DEBUG=false
     networks:
       - default
     restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "python3", "-c", "import json; exit(0 if json.load(open('/app/health/status.json'))['healthy'] else 1)" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   qbittorrent_mamapi:
     image: elforkhead/mamapi:latest
