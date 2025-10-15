@@ -40,14 +40,14 @@ services:
       - /home/fern/docker/data/qbittorrent/qbittorrent/config:/config
       - /media:/media
       - /etc/localtime:/etc/localtime:ro
-    privileged: true
-    sysctls:
-     - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
     environment:
       - VPN_ENABLED=yes
       - VPN_PROV=protonvpn
-      - VPN_CLIENT=wireguard
-      - VPN_USER=${PROTON_USER}
+      - VPN_CLIENT=openvpn
+      - VPN_USER="${PROTON_USER}+pmp"
+      - VPN_PASS=${PROTON_PASS}
       - STRICT_PORT_FORWARD=yes
       - NAME_SERVERS=9.9.9.9
       - LAN_NETWORK=192.168.1.0/24
