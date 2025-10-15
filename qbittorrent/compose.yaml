@@ -71,7 +71,8 @@ services:
         condition: service_healthy
     volumes:
       - /home/fern/docker/data/qbittorrent/mamapi/data:/data
-    network_mode: service:qbittorrent_gluetun
+    networks:
+      - default
     environment:
       TZ: Australia/Perth
       MAM_ID: ${MAM_ID}
