@@ -59,6 +59,8 @@ services:
       - DEBUG=false
     networks:
       - default
+    ports:
+      - 8080:8080
     restart: unless-stopped
     labels:
       caddy: qbittorrent.ferngarden.net
