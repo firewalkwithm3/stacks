@@ -53,7 +53,7 @@ services:
       - VPN_PASS=${PROTON_PASS}
       - STRICT_PORT_FORWARD=yes
       - NAME_SERVERS=9.9.9.9
-      - LAN_NETWORK=192.168.1.0/24
+      - LAN_NETWORK=10.0.1.0/24
       - ENABLE_PRIVOXY=yes
       - PUID=1000
       - PGID=1800
