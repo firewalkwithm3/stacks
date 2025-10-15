@@ -8,9 +8,7 @@ services:
     volumes:
       - /home/fern/docker/data/qbittorrent/cross-seed/config:/config
       - /media:/media
-    networks:
-      - default
-      - media
+    network_mode: service:qbittorrent
     command: daemon
     restart: unless-stopped
     user: 1000:1800
@@ -52,7 +50,7 @@ services:
       - VPN_PASS=${PROTON_PASS}
       - STRICT_PORT_FORWARD=yes
       - NAME_SERVERS=9.9.9.9
-      - LAN_NETWORK=10.0.1.0/24,172.16.0.0/24,172.16.32.0/24
+      - LAN_NETWORK=10.0.1.0/24
       - ENABLE_PRIVOXY=yes
       - PUID=1000
       - PGID=1800
