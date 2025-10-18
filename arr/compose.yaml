@@ -243,20 +243,20 @@ services:
       caddy.1_import: internal
       caddy.2_import: authentik
 
-  soularr:
-    image: mrusse08/soularr:latest
-    container_name: soularr
-    volumes:
-      - /media:/media
-      - /home/fern//docker/data/arr/soularr/config:/data
-    environment:
-      - TZ=Australia/Perth
-      - SCRIPT_INTERVAL=300
-    networks:
-      - default
-      - media
-    restart: unless-stopped
-    user: 1000:1800
+  # soularr:
+  #   image: mrusse08/soularr:latest
+  #   container_name: soularr
+  #   volumes:
+  #     - /media:/media
+  #     - /home/fern//docker/data/arr/soularr/config:/data
+  #   environment:
+  #     - TZ=Australia/Perth
+  #     - SCRIPT_INTERVAL=300
+  #   networks:
+  #     - default
+  #     - media
+  #   restart: unless-stopped
+  #   user: 1000:1800
 
 networks:
   default:
